@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video - MyTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
+        </div>
+    </header>
+    <main class="upload-main">
+        <div id="step-1" class="upload-step">
+            <h2>Step 1: Upload Video</h2>
+            <input type="file" id="video-file" accept="video/*">
+            <button onclick="backToHome()">Back</button> <!-- Back button to home page -->
+            <button onclick="nextStep(2)" class="next-button">Next</button>
+        </div>
+        <div id="step-2" class="upload-step" style="display: none;">
+            <h2>Step 2: Upload Thumbnail</h2>
+            <input type="file" id="thumbnail-file" accept="image/*">
+            <button onclick="nextStep(1)" class="back-button">Back</button>
+            <button onclick="nextStep(3)" class="next-button">Next</button>
+        </div>
+        <div id="step-3" class="upload-step" style="display: none;">
+            <h2>Step 3: Video Details</h2>
+            <input type="text" id="video-title" placeholder="Title">
+            <textarea id="video-description" placeholder="Description"></textarea>
+            <button onclick="nextStep(2)" class="back-button">Back</button>
+            <button onclick="submitVideo()">Submit</button>
+        </div>
+    </main>
+    <div id="message" class="success-message" style="display: none;"></div>
+    <script src="upload.js"></script>
+</body>
+</html>

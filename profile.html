@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
+            </a>
+        </div>
+        <div class="user-actions">
+            <button id="upload-button">Upload</button>
+            <button id="sign-out-button">Sign Out</button>
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+                    alt="User Avatar">
+            </div>
+        </div>
+    </header>
+    <div class="content-wrapper">
+        <main>
+            <div class="profile-container">
+                <div class="cover-image">
+                    <img id="cover-image"
+                        src="https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png"
+                        alt="Cover Image">
+                    <div class="cover-image-menu">
+                        <button class="edit-button" onclick="toggleCoverImageOptions()">Edit</button>
+                        <div class="cover-image-options">
+                            <button onclick="document.getElementById('cover-image-input').click()">Change Cover
+                                Image</button>
+                            <button onclick="removeCoverImage()">Remove Cover Image</button>
+                        </div>
+                        <input type="file" id="cover-image-input" style="display: none;"
+                            onchange="updateCoverImage(event)">
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <div class="profile-image">
+                        <img id="profile-image"
+                            src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+                            alt="Profile Image">
+                        <button onclick="document.getElementById('profile-image-input').click()">+</button>
+                        <input type="file" id="profile-image-input" style="display: none;"
+                            onchange="updateProfileImage(event)">
+                    </div>
+                    <h1></h1>
+                    <h2></h2>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <h2>1000</h2>
+                            <p>Subscribers</p>
+                        </div>
+                        <div class="stat">
+                            <h2>50</h2>
+                            <p>Subscribed To</p>
+                        </div>
+                        <div class="stat">
+                            <h2>5000</h2>
+                            <p>Total Views</p>
+                        </div>
+                    </div>
+                    <button class="edit-profile-btn" onclick="toggleEditProfileForm()">Edit Profile</button>
+                </div>
+
+                <div class="edit-profile-form-container" id="edit-profile-form-container">
+                    <form class="edit-profile-form" id="edit-profile-form">
+                        <h1>Edit Profile</h1>
+                        <label for="new-username">Username:</label>
+                        <input type="text" id="new-username" name="new-username">
+                        <label for="new-email">Email:</label>
+                        <input type="email" id="new-email" name="new-email">
+                        <label for="new-fullname">Full Name:</label>
+                        <input type="text" id="new-fullname" name="new-fullname">
+                        <button type="submit">Save Changes</button>
+                    </form>
+
+                    <form class="edit-password-form" id="edit-password-form">
+                        <h1>Change Password</h1>
+                        <label for="current-password">Current Password:</label>
+                        <input type="password" id="current-password" name="current-password">
+                        <label for="new-password">New Password:</label>
+                        <input type="password" id="new-password" name="new-password">
+                        <button type="submit">Change Password</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="profile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</body>
+
+</html>

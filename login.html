@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MyTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <header>
+            <div class="logo">
+                <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
+            </div>
+        </header>
+        <main>
+            <div class="auth-form-container">
+                <div class="auth-form" id="login-form">
+                    <h1>Login</h1>
+                    <form id="login-form-element" onsubmit="event.preventDefault(); loginUser();">
+                        <label for="login-username">Username or Email</label>
+                        <input type="text" id="login-username" name="usernameOrEmail" required>
+
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required>
+
+                        <button type="submit" id="login-button">Login</button>
+                        <div id="login-general-error" class="general-error"></div>
+                    </form>
+                    <div id="login-success-message" class="success-message"></div>
+                    <p>Don't have an account? <a href="register.html">Register here</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="login.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+    <!-- <script src="cookie.js"></script> -->
+</body>
+
+</html>

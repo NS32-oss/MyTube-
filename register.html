@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MyTube</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <header>
+            <div class="logo">
+                <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
+            </div>
+        </header>
+        <main>
+            <div class="auth-form-container">
+                <div class="auth-form" id="register-form">
+                    <h1>Register</h1>
+                    <form id="register-form-element" onsubmit="event.preventDefault(); registerUser();">
+                        <label for="register-username">Username</label>
+                        <input type="text" id="register-username" name="username" required>
+
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" required>
+
+                        <label for="register-fullname">Full Name</label>
+                        <input type="text" id="register-fullname" name="fullName" required>
+
+                        <label for="register-avatar">Avatar</label>
+                        <input type="file" id="register-avatar" name="avatar" accept="image/*" required>
+
+                        <label for="register-coverImage">Cover Image</label>
+                        <input type="file" id="register-coverImage" name="coverImage" accept="image/*">
+
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" name="password" required>
+
+                        <button type="submit">Register</button>
+                        <div id="register-general-error" class="general-error"></div>
+                    </form>
+                    <div id="register-success-message" class="success-message"></div>
+                    <p>Already have an account? <a href="login.html">Login here</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="register.js"></script>
+</body>
+
+</html>
