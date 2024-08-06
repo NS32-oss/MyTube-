@@ -379,7 +379,7 @@ async function changePassword(event) {
   try {
       const accessToken = Cookies.get("accessToken");
       if (!accessToken) {
-          console.error("User is not authenticated");
+          console.error("User is not authenticateD");
           return;
       }
 
