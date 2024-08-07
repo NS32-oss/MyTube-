@@ -310,9 +310,6 @@ async function logoutUser() {
 }
 
 // Add event listener to Sign Out button
-document
-  .getElementById("sign-out-button")
-  .addEventListener("click", logoutUser);
 
 document.getElementById("upload-button").addEventListener("click", () => {
   window.location.href = "upload.html"; // or wherever upload.js is linked
@@ -325,87 +322,103 @@ document.addEventListener("DOMContentLoaded", () => {
 async function updateProfileDetails(event) {
   event.preventDefault();
 
-  const newUsername = document.getElementById('new-username').value;
-  const newEmail = document.getElementById('new-email').value;
-  const newFullName = document.getElementById('new-fullname').value;
+  const newUsername = document.getElementById("new-username").value;
+  const newEmail = document.getElementById("new-email").value;
+  const newFullName = document.getElementById("new-fullname").value;
 
   const profileData = {
-      username: newUsername || undefined,
-      email: newEmail || undefined,
-      fullName: newFullName || undefined
+    username: newUsername || undefined,
+    email: newEmail || undefined,
+    fullName: newFullName || undefined,
   };
 
   try {
-      const accessToken = Cookies.get("accessToken");
-      if (!accessToken) {
-          console.error("User is not authenticated");
-          return;
-      }
+    const accessToken = Cookies.get("accessToken");
+    if (!accessToken) {
+      console.error("User is not authenticated");
+      return;
+    }
 
-      const response = await fetch("http://localhost:8000/api/v1/users/updateAccount", {
-          method: "PATCH",
-          headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`
-          },
-          body: JSON.stringify(profileData)
-      });
-
-      const data = await response.json();
-      if (response.ok && data.status === 200) {
-          alert("Profile details updated successfully");
-          location.reload();
-      } else {
-          console.error("Failed to update profile details:", data.message);
-          alert(data.message || "Failed to update profile details");
+    const response = await fetch(
+      "http://localhost:8000/api/v1/users/updateAccount",
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(profileData),
       }
+    );
+
+    const data = await response.json();
+    if (response.ok && data.status === 200) {
+      alert("Profile details updated successfully");
+      location.reload();
+    } else {
+      console.error("Failed to update profile details:", data.message);
+      alert(data.message || "Failed to update profile details");
+    }
   } catch (error) {
-      console.error("Error updating profile details:", error);
-      alert("Error: An error occurred while updating profile details. Please try again.");
+    console.error("Error updating profile details:", error);
+    alert(
+      "Error: An error occurred while updating profile details. Please try again."
+    );
   }
 }
 
 async function changePassword(event) {
   event.preventDefault();
 
-  const currentPassword = document.getElementById('current-password').value;
-  const newPassword = document.getElementById('new-password').value;
+  const currentPassword = document.getElementById("current-password").value;
+  const newPassword = document.getElementById("new-password").value;
 
   const passwordData = {
-      currentPassword: currentPassword,
-      newPassword: newPassword
+    currentPassword: currentPassword,
+    newPassword: newPassword,
   };
   console.log(passwordData);
   try {
-      const accessToken = Cookies.get("accessToken");
-      if (!accessToken) {
-          console.error("User is not authenticateD");
-          return;
-      }
+    const accessToken = Cookies.get("accessToken");
+    if (!accessToken) {
+      console.error("User is not authenticateD");
+      return;
+    }
 
-      const response = await fetch("http://localhost:8000/api/v1/users/changePassword", {
-          method: "PATCH",
-          headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`
-          },
-          body: JSON.stringify(passwordData)
-      });
-      console.log(response);
-      const data = await response.json();
-      if (response.ok && data.status === 200) {
-          alert("Password changed successfully");
-          location.reload();
-      } else {
-          console.error("Failed to change password:", data.message);
-          alert("Error: " + (data.message || "Failed to change password"));
+    const response = await fetch(
+      "http://localhost:8000/api/v1/users/changePassword",
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(passwordData),
       }
+    );
+    console.log(response);
+    const data = await response.json();
+    if (response.ok && data.status === 200) {
+      alert("Password changed successfully");
+      location.reload();
+    } else {
+      console.error("Failed to change password:", data.message);
+      alert("Error: " + (data.message || "Failed to change password"));
+    }
   } catch (error) {
-      console.error("Error changing password:", error);
-      alert("Error: An error occurred while changing the password. Please try again.");
+    console.error("Error changing password:", error);
+    alert(
+      "Error: An error occurred while changing the password. Please try again."
+    );
   }
 }
 
-document.getElementById('edit-profile-form').addEventListener('submit', updateProfileDetails);
-document.getElementById('edit-password-form').addEventListener('submit', changePassword);
-
+document
+  .getElementById("sign-out-button")
+  .addEventListener("click", logoutUser);
+document
+  .getElementById("edit-profile-form")
+  .addEventListener("submit", updateProfileDetails);
+document
+  .getElementById("edit-password-form")
+  .addEventListener("submit", changePassword);
