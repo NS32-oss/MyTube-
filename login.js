@@ -42,7 +42,7 @@ async function loginUser() {
       const { accessToken, refreshToken } = data.data;
 
       // Set cookies using Cookies library
-      setCookie('accessToken', accessToken, 1);  // No secure attribute for local testing
+      setCookie('accessToken', accessToken, 2);  // No secure attribute for local testing
       setCookie('refreshToken', refreshToken, 7); // Assuming refresh token is valid for 7 days
 
       console.log("Cookies set:", Cookies.get());
