@@ -1,6 +1,104 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadVideos();
+  showSection('home');
   checkTokenAndFetchUser();
+
+  document.getElementById("close-player").addEventListener("click", () => {
+    document.getElementById("video-player-container").style.display = "none";
+    document.getElementById("current-video").pause();
+  });
 });
+
+async function loadVideos() {
+  try {
+    const response = await fetch("http://localhost:8000/api/v1/video/"); // Adjust your API endpoint
+    const result = await response.json();
+
+    if (result.status === 200) {
+      renderVideos(result.data.allVideos);
+    } else {
+      console.error("Error fetching videos:", result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+function renderVideos(videos) {
+  const videoGrid = document.getElementById("video-grid");
+  videoGrid.innerHTML = ""; // Clear any existing content
+
+  if (videos.length === 0) {
+    videoGrid.innerHTML = "<p>No videos found</p>";
+    return;
+  }
+
+  videos.forEach((video) => {
+    const videoCard = document.createElement("div");
+    videoCard.className = "video-card";
+
+    // Calculate days ago
+    const uploadDate = new Date(video.createdAt);
+    const currentDate = new Date();
+    const daysAgo = Math.floor((currentDate - uploadDate) / (1000 * 60 * 60 * 24));
+    //show video duration upto 2 points only
+    const videoDuration = video.duration
+    // make this videoDuration  to only 2 decimals after "."
+    const videoDuration2 = videoDuration.toFixed(2)
+    
+    
+
+
+    videoCard.innerHTML = `
+      <div class="video-thumbnail">
+        <img src="${video.thumbnail || 'https://via.placeholder.com/320x180'}" alt="${video.title}">
+        <span class="video-duration">${videoDuration2}</span>
+      </div>
+      <div class="video-info">
+        <div class="channel-icon-container"> 
+          <img class="channel-icon" src="${video.owner.avatar || 'https://via.placeholder.com/36'}" alt="${video.channelName}">
+        </div>
+        <div class="video-details">
+          <h3 class="video-title">${video.title}</h3>
+          <p class="video-channel">${video.owner.username}</p>
+          <p class="video-stats">${video.views} views • ${daysAgo} days ago</p>
+        </div>
+      </div>
+    `;
+
+    videoCard.addEventListener("click", () => {
+      playVideo(video);
+    });
+
+    videoGrid.appendChild(videoCard);
+  });
+}
+
+
+
+
+
+function playVideo(video) {
+  const videoPlayerContainer = document.getElementById("video-player-container");
+  const currentVideo = document.getElementById("current-video");
+  const videoTitle = document.getElementById("video-title");
+  const videoDescription = document.getElementById("video-description");
+
+  currentVideo.src = video.videoFile;
+  videoTitle.textContent = video.title;
+  videoDescription.textContent = video.description || "No description available";
+
+  videoPlayerContainer.style.display = "block";
+  currentVideo.play();
+}
+
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(section => {
+      section.style.display = section.id === sectionId ? 'block' : 'none';
+  });
+}
+
+
 
 async function checkTokenAndFetchUser() {
   try {
