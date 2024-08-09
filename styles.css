@@ -387,22 +387,6 @@ nav ul li a.active {
     background-color: #c00;
 }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Active Link Style */
 nav ul li a.active {
     font-weight: bold;
@@ -411,7 +395,9 @@ nav ul li a.active {
 
 main {
     flex-grow: 1;
-    padding: 20px;
+    /* give padding on all side OF 8 px except right */
+    padding: 8px 2px 8px 8px;
+    padding: 8px;
 }
 
 .section {
