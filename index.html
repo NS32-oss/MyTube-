@@ -79,18 +79,29 @@
                 <p>Content for Playlists section.</p>
             </section>
             <section id="your-videos" class="section" style="display: none;">
-                <div class="videos-summary">
+                <!-- <div class="videos-summary">
                     <div class="summary-item">
                         <h3>Total Videos</h3>
-                        <p class="summary-count" id="total-videos">123</p> <!-- Replace with actual data -->
+                        <p class="summary-count" id="total-videos">123</p> 
                     </div>
                     <div class="summary-item">
                         <h3>Total Views</h3>
-                        <p class="summary-count" id="total-views">4567</p> <!-- Replace with actual data -->
+                        <p class="summary-count" id="total-views">4567</p> 
                     </div>
                 </div>
                 <h2>Your Videos</h2>
-                <hr>
+                <hr> -->
+                <div id="video-grid" class="video-grid"></div>
+
+                <div id="video-player-container" class="video-player-container">
+                    <video id="current-video" controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3 id="video-title"></h3>
+                    <p id="video-description"></p>
+                    <button id="close-player">Close Player</button>
+                </div>
             </section>
             <section id="watch-later" class="section" style="display: none;">
                 <h2>Watch Later</h2>

@@ -15,6 +15,7 @@ async function loadVideos() {
     const result = await response.json();
 
     if (result.status === 200) {
+      // console.log("Videos:", result.data);
       renderVideos(result.data.allVideos);
     } else {
       console.error("Error fetching videos:", result.message);
@@ -25,18 +26,19 @@ async function loadVideos() {
 }
 
 function renderVideos(videos) {
+  // console.log("Rendering videos:", videos);
   const videoGrid = document.getElementById("video-grid");
   videoGrid.innerHTML = ""; // Clear any existing content
 
   if (videos.length === 0) {
     videoGrid.innerHTML = "<p>No videos found</p>";
+    console.log("No videos found");
     return;
   }
-
   videos.forEach((video) => {
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
-
+    
     // Calculate days ago
     const uploadDate = new Date(video.createdAt);
     const currentDate = new Date();
@@ -44,12 +46,9 @@ function renderVideos(videos) {
     //show video duration upto 2 points only
     const videoDuration = video.duration
     // make this videoDuration  to only 2 decimals after "."
-    const videoDuration2 = videoDuration.toFixed(2)
-    
-    
-
-
-    videoCard.innerHTML = `
+    const videoDuration2 = videoDuration.toFixed(2);
+    console.log("Videos found:", videos.length);
+        videoCard.innerHTML = `
       <div class="video-thumbnail">
         <img src="${video.thumbnail || 'https://via.placeholder.com/320x180'}" alt="${video.title}">
         <span class="video-duration">${videoDuration2}</span>
@@ -73,11 +72,6 @@ function renderVideos(videos) {
     videoGrid.appendChild(videoCard);
   });
 }
-
-
-
-
-
 function playVideo(video) {
   const videoPlayerContainer = document.getElementById("video-player-container");
   const currentVideo = document.getElementById("current-video");
@@ -92,6 +86,35 @@ function playVideo(video) {
   currentVideo.play();
 }
 
+//fetch all videos for a particular user and show this "your videos" section
+// when the user clicks on the "Your Videos" link in the navigation bar. then call the loadYourVideos function
+document.getElementById("your-videos-link").addEventListener("click", async () => {
+  showSection('your-videos');
+  await loadYourVideos();
+});
+async function loadYourVideos() {
+  try {
+    const accessToken = getCookie("accessToken");
+    const response = await fetch("http://localhost:8000/api/v1/video/getVideosByUserId", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+    const result = await response.json();
+    console.log("Your videos response:", result);
+    if (result.status === 200) {
+      renderVideos(result.data);
+    } else {
+      console.error("Error fetching videos:", result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
 function showSection(sectionId) {
   document.querySelectorAll('.section').forEach(section => {
       section.style.display = section.id === sectionId ? 'block' : 'none';
@@ -103,7 +126,6 @@ function showSection(sectionId) {
 async function checkTokenAndFetchUser() {
   try {
     const accessToken = getCookie("accessToken");
-    console.log("Access token:", accessToken);
 
     if (!accessToken) {
       console.log("No access token found, redirecting to login page.");
@@ -122,7 +144,6 @@ async function checkTokenAndFetchUser() {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("User data response:", data);
       if (data.status === 200) {
         const user = data.data;
         displayUserProfile(user);
