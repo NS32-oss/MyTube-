@@ -130,10 +130,30 @@ function renderVideos(videos, section) {
           ? "video-description-home"
           : "video-description-your-videos"
       );
+      const videoViews = document.getElementById(
+        section === "home" ? "video-views-home" : "video-views-your-videos"
+      );
+      const ownerAvatar = document.getElementById(
+        section === "home" ? "owner-avatar-home" : "owner-avatar-your-videos"
+      );
+      const ownerUsername = document.getElementById(
+        section === "home"
+          ? "owner-username-home"
+          : "owner-username-your-videos"
+      );
+      const ownerSubscribers = document.getElementById(
+        section === "home"
+          ? "owner-subscribers-home"
+          : "owner-subscribers-your-videos"
+      );
 
       videoElement.src = video.videoFile;
       videoTitle.textContent = video.title;
       videoDescription.textContent = video.description;
+      videoViews.textContent = `${video.views} views`;
+      ownerAvatar.src = video.owner.avatar;
+      ownerUsername.textContent = video.owner.username;
+      ownerSubscribers.textContent = `100 subscribers`;
       playerContainer.style.display = "block";
       videoElement.play();
     });
@@ -141,6 +161,19 @@ function renderVideos(videos, section) {
     videoGrid.appendChild(videoCard);
   });
 }
+// Toggle Like Button State
+document.getElementById("like-btn-home").addEventListener("click", function () {
+  this.classList.toggle("liked");
+  // You can also handle the logic to update the like status on the server here
+});
+
+// Toggle Subscribe Button State
+document
+  .getElementById("subscribe-btn-home")
+  .addEventListener("click", function () {
+    this.classList.toggle("subscribed");
+    // You can also handle the logic to update the subscription status on the server here
+  });
 
 function showSection(section) {
   const sections = document.querySelectorAll("section.section");

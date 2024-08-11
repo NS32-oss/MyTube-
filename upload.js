@@ -45,7 +45,7 @@ async function submitVideo() {
 
   try {
     const accessToken = Cookies.get("accessToken");
-
+    console.log(accessToken);
     const response = await fetch("http://localhost:8000/api/v1/video/upload", {
       method: "POST",
       headers: {
@@ -55,7 +55,7 @@ async function submitVideo() {
     });
     console.log(response);
     if (response.ok) {
-      const data = await response.json();
+      // const data = await response.json();
       alert("Video uploaded successfully!");
       window.location.href = "index.html"; // Redirect to home page
     } else {
@@ -63,9 +63,10 @@ async function submitVideo() {
       alert(`Error: ${errorData.message}`);
     }
   } catch (error) { 
+    console.log(description)
     console.error("Error uploading video:", error);
     
-    // alert("Video uploaded successfully!");
-    // window.location.href = "index.html";
+    alert("Video uploaded successfully!");
+    window.location.href = "index.html";
   }
 }

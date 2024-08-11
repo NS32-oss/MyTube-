@@ -361,7 +361,7 @@ nav ul li a.active {
   border-radius: 8px;
   z-index: 1000;
   width: 80%;
-  max-width: 800px;
+  max-width: 700px;
 }
 
 #current-video-home,
@@ -386,6 +386,97 @@ nav ul li a.active {
 #close-player-home:hover,
 #close-player-your-videos:hover {
   background-color: #c00;
+}
+
+/* Video Player */
+/* Video Views */
+#video-views-home {
+  color: #bbb; /* Light gray for contrast */
+  font-size: 1em;
+  margin-bottom: 15px;
+}
+
+/* Owner Info Container */
+#video-owner-info-home {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Owner Profile Button */
+#owner-profile-btn-home {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Owner Avatar */
+#owner-avatar-home {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* Owner Username */
+#owner-username-home {
+  color: #fff; /* White text for contrast */
+  font-weight: bold;
+}
+
+/* Owner Subscribers */
+#owner-subscribers-home {
+  color: #ccc; /* Light gray for contrast */
+  margin-right: 15px;
+}
+
+/* Subscribe Button */
+/* Default state for Like Button */
+#like-btn-home {
+  background: none;
+  border: none;
+  color: #fff; /* White text */
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#like-btn-home i {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+/* Liked State */
+#like-btn-home.liked {
+  color: #ff0000; /* Red color to indicate liked */
+}
+
+/* Default state for Subscribe Button */
+#subscribe-btn-home {
+  background-color: #ff0000; /* Red for prominence */
+  color: #fff; /* White text */
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+#subscribe-btn-home:hover {
+  background-color: #e60000; /* Slightly darker red on hover */
+}
+
+/* Subscribed State */
+#subscribe-btn-home.subscribed {
+  background-color: #00ff00; /* Green to indicate subscribed */
+  color: #fff; /* White text */
+}
+
+#subscribe-btn-home.subscribed:hover {
+  background-color: #00cc00; /* Slightly darker green on hover */
 }
 
 /* Active Link Style */
