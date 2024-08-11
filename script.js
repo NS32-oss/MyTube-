@@ -1,22 +1,36 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadVideos();
-  showSection('home');
+  await loadVideos("home");
+  showSection("home");
   checkTokenAndFetchUser();
 
-  document.getElementById("close-player").addEventListener("click", () => {
-    document.getElementById("video-player-container").style.display = "none";
-    document.getElementById("current-video").pause();
+  document.getElementById("close-player-home").addEventListener("click", () => {
+    document.getElementById("video-player-container-home").style.display =
+      "none";
+    document.getElementById("current-video-home").pause();
+  });
+
+  document
+    .getElementById("close-player-your-videos")
+    .addEventListener("click", () => {
+      document.getElementById(
+        "video-player-container-your-videos"
+      ).style.display = "none";
+      document.getElementById("current-video-your-videos").pause();
+    });
+
+  await loadYourVideos();
+  document.getElementById("your-videos").addEventListener("click", async () => {
+    showSection("your-videos");
   });
 });
 
-async function loadVideos() {
+async function loadVideos(section) {
   try {
     const response = await fetch("http://localhost:8000/api/v1/video/"); // Adjust your API endpoint
     const result = await response.json();
 
     if (result.status === 200) {
-      // console.log("Videos:", result.data);
-      renderVideos(result.data.allVideos);
+      renderVideos(result.data.allVideos, section);
     } else {
       console.error("Error fetching videos:", result.message);
     }
@@ -25,9 +39,37 @@ async function loadVideos() {
   }
 }
 
-function renderVideos(videos) {
-  // console.log("Rendering videos:", videos);
-  const videoGrid = document.getElementById("video-grid");
+async function loadYourVideos() {
+  try {
+    const accessToken = getCookie("accessToken");
+    const response = await fetch(
+      "http://localhost:8000/api/v1/video/getVideosByUserId",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
+    const result = await response.json();
+    if (result.status === 200) {
+      //set no. of videos in the profile page as per size of result.data
+      document.getElementById("total-videos").textContent = result.data.length;
+      renderVideos(result.data, "your-videos");
+    } else {
+      console.error("Error fetching videos:", result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+function renderVideos(videos, section) {
+  const videoGrid = document.getElementById(
+    section === "home" ? "video-grid-home" : "video-grid-your-videos"
+  );
   videoGrid.innerHTML = ""; // Clear any existing content
 
   if (videos.length === 0) {
@@ -35,27 +77,33 @@ function renderVideos(videos) {
     console.log("No videos found");
     return;
   }
+
   videos.forEach((video) => {
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
-    
+
     // Calculate days ago
     const uploadDate = new Date(video.createdAt);
     const currentDate = new Date();
-    const daysAgo = Math.floor((currentDate - uploadDate) / (1000 * 60 * 60 * 24));
-    //show video duration upto 2 points only
-    const videoDuration = video.duration
-    // make this videoDuration  to only 2 decimals after "."
-    const videoDuration2 = videoDuration.toFixed(2);
-    console.log("Videos found:", videos.length);
-        videoCard.innerHTML = `
+    const daysAgo = Math.floor(
+      (currentDate - uploadDate) / (1000 * 60 * 60 * 24)
+    );
+
+    // Show video duration with 2 decimal points
+    const videoDuration = video.duration.toFixed(2);
+
+    videoCard.innerHTML = `
       <div class="video-thumbnail">
-        <img src="${video.thumbnail || 'https://via.placeholder.com/320x180'}" alt="${video.title}">
-        <span class="video-duration">${videoDuration2}</span>
+        <img src="${
+          video.thumbnail || "https://via.placeholder.com/320x180"
+        }" alt="${video.title}">
+        <span class="video-duration">${videoDuration}</span>
       </div>
       <div class="video-info">
         <div class="channel-icon-container"> 
-          <img class="channel-icon" src="${video.owner.avatar || 'https://via.placeholder.com/36'}" alt="${video.channelName}">
+          <img class="channel-icon" src="${
+            video.owner.avatar || "https://via.placeholder.com/36"
+          }" alt="${video.channelName}">
         </div>
         <div class="video-details">
           <h3 class="video-title">${video.title}</h3>
@@ -66,62 +114,40 @@ function renderVideos(videos) {
     `;
 
     videoCard.addEventListener("click", () => {
-      playVideo(video);
+      const playerContainer = document.getElementById(
+        section === "home"
+          ? "video-player-container-home"
+          : "video-player-container-your-videos"
+      );
+      const videoElement = document.getElementById(
+        section === "home" ? "current-video-home" : "current-video-your-videos"
+      );
+      const videoTitle = document.getElementById(
+        section === "home" ? "video-title-home" : "video-title-your-videos"
+      );
+      const videoDescription = document.getElementById(
+        section === "home"
+          ? "video-description-home"
+          : "video-description-your-videos"
+      );
+
+      videoElement.src = video.videoFile;
+      videoTitle.textContent = video.title;
+      videoDescription.textContent = video.description;
+      playerContainer.style.display = "block";
+      videoElement.play();
     });
 
     videoGrid.appendChild(videoCard);
   });
 }
-function playVideo(video) {
-  const videoPlayerContainer = document.getElementById("video-player-container");
-  const currentVideo = document.getElementById("current-video");
-  const videoTitle = document.getElementById("video-title");
-  const videoDescription = document.getElementById("video-description");
 
-  currentVideo.src = video.videoFile;
-  videoTitle.textContent = video.title;
-  videoDescription.textContent = video.description || "No description available";
-
-  videoPlayerContainer.style.display = "block";
-  currentVideo.play();
-}
-
-//fetch all videos for a particular user and show this "your videos" section
-// when the user clicks on the "Your Videos" link in the navigation bar. then call the loadYourVideos function
-document.getElementById("your-videos-link").addEventListener("click", async () => {
-  showSection('your-videos');
-  await loadYourVideos();
-});
-async function loadYourVideos() {
-  try {
-    const accessToken = getCookie("accessToken");
-    const response = await fetch("http://localhost:8000/api/v1/video/getVideosByUserId", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-    });
-    const result = await response.json();
-    console.log("Your videos response:", result);
-    if (result.status === 200) {
-      renderVideos(result.data);
-    } else {
-      console.error("Error fetching videos:", result.message);
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-function showSection(sectionId) {
-  document.querySelectorAll('.section').forEach(section => {
-      section.style.display = section.id === sectionId ? 'block' : 'none';
+function showSection(section) {
+  const sections = document.querySelectorAll("section.section");
+  sections.forEach((sec) => {
+    sec.style.display = sec.id === section ? "block" : "none";
   });
 }
-
-
 
 async function checkTokenAndFetchUser() {
   try {
@@ -133,14 +159,17 @@ async function checkTokenAndFetchUser() {
       return;
     }
 
-    const response = await fetch("http://localhost:8000/api/v1/users/current-user", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      "http://localhost:8000/api/v1/users/current-user",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -171,7 +200,8 @@ function displayUserProfile(user) {
   if (user.avatar) {
     userProfileImg.src = user.avatar;
   } else {
-    userProfileImg.src = "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
+    userProfileImg.src =
+      "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
   }
 }
 
@@ -182,10 +212,13 @@ function handleTokenError() {
 
 async function refreshToken() {
   try {
-    const response = await fetch("http://localhost:8000/api/v1/users/refreshAccessToken", {
-      method: "POST",
-      credentials: "include",
-    });
+    const response = await fetch(
+      "http://localhost:8000/api/v1/users/refreshAccessToken",
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -194,8 +227,8 @@ async function refreshToken() {
         const { accessToken, refreshToken } = data.data;
 
         // Set tokens as cookies
-        setCookie('accessToken', accessToken, 1);  // No secure attribute for local testing
-        setCookie('refreshToken', refreshToken, 7); // Assuming refresh token is valid for 7 days
+        setCookie("accessToken", accessToken, 1); // No secure attribute for local testing
+        setCookie("refreshToken", refreshToken, 7); // Assuming refresh token is valid for 7 days
 
         console.log("Token refreshed successfully. Retrying user data fetch.");
         await checkTokenAndFetchUser();
@@ -204,7 +237,11 @@ async function refreshToken() {
         handleTokenError();
       }
     } else {
-      console.error("Failed to refresh token, HTTP error:", response.status, response.statusText);
+      console.error(
+        "Failed to refresh token, HTTP error:",
+        response.status,
+        response.statusText
+      );
       handleTokenError();
     }
   } catch (error) {
@@ -223,7 +260,6 @@ function getCookie(name) {
 document.querySelector(".user-profile img").addEventListener("click", () => {
   window.location.href = "profile.html";
 });
-
 
 function showSection(sectionId) {
   document.querySelectorAll(".section").forEach((section) => {

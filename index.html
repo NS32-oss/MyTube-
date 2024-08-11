@@ -51,20 +51,24 @@
         </nav>
 
         <main>
-            <section id="home" class="section">
-                <div id="video-grid" class="video-grid"></div>
 
-                <div id="video-player-container" class="video-player-container">
-                    <video id="current-video" controls>
+
+
+            <section id="home" class="section">
+                <div id="video-grid-home" class="video-grid"></div>
+
+                <div id="video-player-container-home" class="video-player-container">
+                    <video id="current-video-home" controls>
                         <source src="" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <h3 id="video-title"></h3>
-                    <p id="video-description"></p>
-                    <button id="close-player">Close Player</button>
+                    <h3 id="video-title-home"></h3>
+                    <p id="video-description-home"></p>
+                    <button id="close-player-home">Close Player</button>
                 </div>
-
             </section>
+
+
 
             <section id="your-tweets" class="section" style="display: none;">
                 <h2>Your Tweets</h2>
@@ -78,31 +82,38 @@
                 <h2>Playlists</h2>
                 <p>Content for Playlists section.</p>
             </section>
+
+
+
             <section id="your-videos" class="section" style="display: none;">
-                <!-- <div class="videos-summary">
+                <div class="videos-summary">
                     <div class="summary-item">
                         <h3>Total Videos</h3>
-                        <p class="summary-count" id="total-videos">123</p> 
+                        <p class="summary-count" id="total-videos">123</p>
                     </div>
                     <div class="summary-item">
                         <h3>Total Views</h3>
-                        <p class="summary-count" id="total-views">4567</p> 
+                        <p class="summary-count" id="total-views">4567</p>
                     </div>
                 </div>
-                <h2>Your Videos</h2>
-                <hr> -->
-                <div id="video-grid" class="video-grid"></div>
+                <hr>
+                <div id="video-grid-your-videos" class="video-grid"></div>
 
-                <div id="video-player-container" class="video-player-container">
-                    <video id="current-video" controls>
+                <div id="video-player-container-your-videos" class="video-player-container">
+                    <video id="current-video-your-videos" controls>
                         <source src="" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
-                    <h3 id="video-title"></h3>
-                    <p id="video-description"></p>
-                    <button id="close-player">Close Player</button>
+                    <h3 id="video-title-your-videos"></h3>
+                    <p id="video-description-your-videos"></p>
+                    <button id="close-player-your-videos">Close Player</button>
                 </div>
             </section>
+
+
+
+
+
             <section id="watch-later" class="section" style="display: none;">
                 <h2>Watch Later</h2>
                 <p>Content for Watch Later section.</p>
@@ -116,8 +127,6 @@
     <script src="login.js"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-
-    <!-- <script src="profile.js"></script> Add this line to include the separate JS file -->
 </body>
 
 </html>
