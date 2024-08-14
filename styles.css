@@ -5,6 +5,8 @@ body {
   color: #ffffff;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* Disable horizontal scrolling on the body */
+  overflow-y: auto; /* Enable vertical scrolling on the body */
 }
 
 /* Header Styles */
@@ -15,7 +17,14 @@ header {
   padding: 0px 20px;
   background-color: #202020;
   color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001; /* Ensure it stays above the video player */
+  height: 110px; /* Ensure the height is consistent */
 }
+
 
 header .logo img {
   height: 110px;
@@ -106,6 +115,7 @@ header .user-actions .user-profile img {
 /* Content Wrapper */
 .content-wrapper {
   display: flex;
+  margin-top: 110px; /* Adjusted to match the header height */
 }
 
 nav {
@@ -113,6 +123,9 @@ nav {
   width: 250px;
   padding-top: 10px;
   min-height: 100vh;
+  overflow-y: auto;
+  /* I want to make the nav fixed while the main should be scrollable and of same size */
+  position: fixed;
 }
 
 /* Navigation Styles */
@@ -350,7 +363,7 @@ nav ul li a.active {
 }
 
 /* Video Player Container */
-.video-player-container {
+/* .video-player-container {
   display: none;
   position: fixed;
   top: 50%;
@@ -362,7 +375,7 @@ nav ul li a.active {
   z-index: 1000;
   width: 80%;
   max-width: 700px;
-}
+} */
 
 #current-video-home,
 #current-video-your-videos {
@@ -479,17 +492,63 @@ nav ul li a.active {
   background-color: #00cc00; /* Slightly darker green on hover */
 }
 
+
+
+/* Video Player Styles */
+.video-player-container {
+  display: none;
+  position: fixed;
+  top: 110px; /* Below the header */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 15px;
+  z-index: 1000;
+  width: 80%; /* Adjust this to control the width of the video player */
+  height: calc(100% - 130px); /* Adjusted height to leave space at the bottom */
+  max-width: 1020px; /* Maximum width for larger screens */
+  overflow-y: auto; /* Enable scrolling for overflow content */
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 /* Active Link Style */
 nav ul li a.active {
   font-weight: bold;
   background-color: #ff0000; /* Change to your preferred color */
 }
 
+
 main {
   flex-grow: 1;
   /* give padding on all side OF 8 px except right */
   padding: 8px 2px 8px 8px;
   padding: 8px;
+  /* background-color: #181818; */
+  /* color: #ffffff; */
+  /* margin-left: 250px; */
+  /* margin-right: 50px; */
+}
+.main-n {
+  flex-grow: 1;
+  /* give padding on all side OF 8 px except right */
+  padding: 8px 2px 8px 8px;
+  padding: 8px;
+  /* background-color: #181818; */
+  /* color: #ffffff; */
+  margin-left: 250px;
+  /* margin-right: 50px; */
+}
+.l {
+  flex-grow: 1;
+  /* give padding on all side OF 8 px except right */
+  padding: 8px 2px 8px 8px;
+  padding: 8px;
+  margin-top: 110px;
 }
 
 .section {
@@ -859,6 +918,7 @@ button.success {
   margin: auto;
   background-color: #181818;
   color: #ffffff;
+  margin-top: 110px;
 }
 
 .upload-step {

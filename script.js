@@ -3,25 +3,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   showSection("home");
   checkTokenAndFetchUser();
 
-  document.getElementById("close-player-home").addEventListener("click", () => {
-    document.getElementById("video-player-container-home").style.display =
-      "none";
-    document.getElementById("current-video-home").pause();
-  });
-
-  document
-    .getElementById("close-player-your-videos")
-    .addEventListener("click", () => {
-      document.getElementById(
-        "video-player-container-your-videos"
-      ).style.display = "none";
-      document.getElementById("current-video-your-videos").pause();
+  const closePlayerHome = document.getElementById("close-player-home");
+  if (closePlayerHome) {
+    closePlayerHome.addEventListener("click", () => {
+      const videoPlayerContainerHome = document.getElementById("video-player-container-home");
+      const currentVideoHome = document.getElementById("current-video-home");
+      if (videoPlayerContainerHome) videoPlayerContainerHome.style.display = "none";
+      if (currentVideoHome) currentVideoHome.pause();
     });
+  }
+
+  const closePlayerYourVideos = document.getElementById("close-player-your-videos");
+  if (closePlayerYourVideos) {
+    closePlayerYourVideos.addEventListener("click", () => {
+      const videoPlayerContainerYourVideos = document.getElementById("video-player-container-your-videos");
+      const currentVideoYourVideos = document.getElementById("current-video-your-videos");
+      if (videoPlayerContainerYourVideos) videoPlayerContainerYourVideos.style.display = "none";
+      if (currentVideoYourVideos) currentVideoYourVideos.pause();
+    });
+  }
 
   await loadYourVideos();
-  document.getElementById("your-videos").addEventListener("click", async () => {
-    showSection("your-videos");
-  });
+  
+  const yourVideosButton = document.getElementById("your-videos");
+  if (yourVideosButton) {
+    yourVideosButton.addEventListener("click", async () => {
+      showSection("your-videos");
+    });
+  }
 });
 
 async function loadVideos(section) {
@@ -43,7 +52,7 @@ async function loadYourVideos() {
   try {
     const accessToken = getCookie("accessToken");
     const response = await fetch(
-      "http://localhost:8000/api/v1/video/getVideosByUserId",
+      "http://localhost:8000/api/v1/video/user/videos",
       {
         method: "GET",
         headers: {
@@ -55,9 +64,11 @@ async function loadYourVideos() {
     );
     const result = await response.json();
     if (result.status === 200) {
-      //set no. of videos in the profile page as per size of result.data
-      document.getElementById("total-videos").textContent = result.data.length;
-      renderVideos(result.data, "your-videos");
+      const totalVideosElement = document.getElementById("total-videos");
+      if (totalVideosElement) {
+        totalVideosElement.textContent = result.data.length;
+      }
+      renderVideos(result.data, null);
     } else {
       console.error("Error fetching videos:", result.message);
     }
@@ -70,11 +81,12 @@ function renderVideos(videos, section) {
   const videoGrid = document.getElementById(
     section === "home" ? "video-grid-home" : "video-grid-your-videos"
   );
-  videoGrid.innerHTML = ""; // Clear any existing content
 
+  if (!videoGrid) return;
+
+  videoGrid.innerHTML = ""; // Clear any existing content
   if (videos.length === 0) {
     videoGrid.innerHTML = "<p>No videos found</p>";
-    console.log("No videos found");
     return;
   }
 
@@ -91,19 +103,15 @@ function renderVideos(videos, section) {
 
     // Show video duration with 2 decimal points
     const videoDuration = video.duration.toFixed(2);
-
+    const videoId=video._id;
     videoCard.innerHTML = `
       <div class="video-thumbnail">
-        <img src="${
-          video.thumbnail || "https://via.placeholder.com/320x180"
-        }" alt="${video.title}">
+        <img src="${video.thumbnail || "https://via.placeholder.com/320x180"}" alt="${video.title}">
         <span class="video-duration">${videoDuration}</span>
       </div>
       <div class="video-info">
         <div class="channel-icon-container"> 
-          <img class="channel-icon" src="${
-            video.owner.avatar || "https://via.placeholder.com/36"
-          }" alt="${video.channelName}">
+          <img class="channel-icon" src="${video.owner.avatar || "https://via.placeholder.com/36"}" alt="${video.channelName}">
         </div>
         <div class="video-details">
           <h3 class="video-title">${video.title}</h3>
@@ -114,66 +122,61 @@ function renderVideos(videos, section) {
     `;
 
     videoCard.addEventListener("click", () => {
-      const playerContainer = document.getElementById(
-        section === "home"
-          ? "video-player-container-home"
-          : "video-player-container-your-videos"
-      );
-      const videoElement = document.getElementById(
-        section === "home" ? "current-video-home" : "current-video-your-videos"
-      );
-      const videoTitle = document.getElementById(
-        section === "home" ? "video-title-home" : "video-title-your-videos"
-      );
-      const videoDescription = document.getElementById(
-        section === "home"
-          ? "video-description-home"
-          : "video-description-your-videos"
-      );
-      const videoViews = document.getElementById(
-        section === "home" ? "video-views-home" : "video-views-your-videos"
-      );
-      const ownerAvatar = document.getElementById(
-        section === "home" ? "owner-avatar-home" : "owner-avatar-your-videos"
-      );
-      const ownerUsername = document.getElementById(
-        section === "home"
-          ? "owner-username-home"
-          : "owner-username-your-videos"
-      );
-      const ownerSubscribers = document.getElementById(
-        section === "home"
-          ? "owner-subscribers-home"
-          : "owner-subscribers-your-videos"
-      );
+      window.location.href = `videoPlayer.html?id=${videoId}`;
+      // const playerContainer = document.getElementById(
+      //   section === "home" ? "video-player-container-home" : "video-player-container-your-videos"
+      // );
+      // const videoElement = document.getElementById(
+      //   section === "home" ? "current-video-home" : "current-video-your-videos"
+      // );
+      // const videoTitle = document.getElementById(
+      //   section === "home" ? "video-title-home" : "video-title-your-videos"
+      // );
+      // const videoDescription = document.getElementById(
+      //   section === "home" ? "video-description-home" : "video-description-your-videos"
+      // );
+      // const ownerAvatar = document.getElementById(
+      //   section === "home" ? "owner-avatar-home" : "owner-avatar-your-videos"
+      // );
+      // const ownerUsername = document.getElementById(
+      //   section === "home" ? "owner-username-home" : "owner-username-your-videos"
+      // );
+      // const ownerSubscribers = document.getElementById(
+      //   section === "home" ? "owner-subscribers-home" : "owner-subscribers-your-videos"
+      // );
 
-      videoElement.src = video.videoFile;
-      videoTitle.textContent = video.title;
-      videoDescription.textContent = video.description;
-      videoViews.textContent = `${video.views} views`;
-      ownerAvatar.src = video.owner.avatar;
-      ownerUsername.textContent = video.owner.username;
-      ownerSubscribers.textContent = `100 subscribers`;
-      playerContainer.style.display = "block";
-      videoElement.play();
+      // if (videoElement) videoElement.src = video.videoFile;
+      // if (videoTitle) videoTitle.textContent = video.title;
+      // if (videoDescription) videoDescription.textContent = video.description;
+      // if (ownerAvatar) ownerAvatar.src = video.owner.avatar || "https://via.placeholder.com/36";
+      // if (ownerUsername) ownerUsername.textContent = video.owner.username;
+      // if (ownerSubscribers) ownerSubscribers.textContent = `${video.owner.subscribers} subscribers`;
+      // if (playerContainer) playerContainer.style.display = "block";
+      // if (videoElement) videoElement.play();
     });
 
     videoGrid.appendChild(videoCard);
   });
 }
+
 // Toggle Like Button State
-document.getElementById("like-btn-home").addEventListener("click", function () {
-  this.classList.toggle("liked");
-  // You can also handle the logic to update the like status on the server here
-});
+const likeButtonHome = document.getElementById("like-btn-home");
+if (likeButtonHome) {
+  likeButtonHome.addEventListener("click", function () {
+    this.classList.toggle("liked");
+    // You can also handle the logic to update the like status on the server here
+  });
+}
 
 // Toggle Subscribe Button State
-document
-  .getElementById("subscribe-btn-home")
-  .addEventListener("click", function () {
+const subscribeButtonHome = document.getElementById("subscribe-btn-home");
+if (subscribeButtonHome) {
+  subscribeButtonHome.addEventListener("click", function () {
     this.classList.toggle("subscribed");
     // You can also handle the logic to update the subscription status on the server here
   });
+}
+
 
 function showSection(section) {
   const sections = document.querySelectorAll("section.section");

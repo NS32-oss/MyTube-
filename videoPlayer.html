@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"><!-- Link to your CSS file -->
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo"></a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-actions">
+            <button id="video-dropdown-button"><i class="fas fa-video"></i></button>
+            <div id="video-dropdown-menu" class="dropdown-menu">
+                <button onclick="window.location.href='upload.html'">Upload Video</button>
+                <button onclick="createPost()">Create Post</button>
+            </div>
+            <button><i class="fas fa-bell"></i></button>
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+                    alt="User Profile">
+            </div>
+        </div>
+    </header>
+
+    <!-- Video Player Section -->
+    <div id="video-player-container-home" class="video-player-container">
+        <video id="current-video-home" controls>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <h3 id="video-title-home"></h3>
+        <p id="video-description-home"></p>
+
+        <!-- New Elements Added -->
+        <p id="video-views-home"></p>
+        <div id="video-owner-info-home">
+            <button id="owner-profile-btn-home">
+                <img id="owner-avatar-home" src="" alt="Owner Profile">
+                <span id="owner-username-home"></span>
+            </button>
+            <span id="owner-subscribers-home"></span>
+            <button id="subscribe-btn-home">Subscribe</button>
+        </div>
+        <button id="like-btn-home">
+            <i class="fas fa-thumbs-up"></i> Like
+        </button>
+        <!-- End of New Elements -->
+
+        <button id="close-player-home">Close Player</button>
+    </div>
+
+    <script src="videoPlayer.js"></script>
+</body>
+</html>
