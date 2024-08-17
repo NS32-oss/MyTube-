@@ -25,6 +25,7 @@ header {
   height: 110px; /* Ensure the height is consistent */
 }
 
+
 header .logo img {
   height: 110px;
 }
@@ -165,7 +166,7 @@ nav ul li a:hover {
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 12%; /* Position the dropdown directly below the button */
+  top: 70%; /* Position the dropdown directly below the button */
   right: 0;
   background-color: #202020;
   border: 1px solid #444;
@@ -391,7 +392,7 @@ nav ul li a.active {
 
 #close-player-home,
 #close-player-your-videos {
-  margin-right: 0px;
+  margin-right:0px;
   /* margin-top: 10px; */
   background-color: #3ea6ff;
   color: #fff;
@@ -593,6 +594,8 @@ nav ul li a.active {
   margin-bottom: 0px;
 }
 
+
+
 /*comment section*/
 /* Comment styling */
 .comment {
@@ -724,6 +727,7 @@ button[type="submit"] {
   background-color: #444;
 }
 
+
 /* Styles for editing comment */
 .edit-mode {
   display: flex;
@@ -743,16 +747,24 @@ button[type="submit"] {
   color: white;
 }
 .edit-textarea {
+ 
   color: #fff;
   background-color: #202020; /* Light red color */
   /* You can adjust the color as needed */
 }
+
+
+
+
+
+
 
 /* Active Link Style */
 nav ul li a.active {
   font-weight: bold;
   background-color: #ff0000; /* Change to your preferred color */
 }
+
 
 main {
   flex-grow: 1;

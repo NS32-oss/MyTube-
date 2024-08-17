@@ -2,7 +2,6 @@
 
 // Import Cookies library if using module bundler
 // import Cookies from 'js-cookie'; // Uncomment if using module bundler
-
 // Function to handle token errors
 function handleTokenError() {
   window.location.href = "login.html";
@@ -54,7 +53,7 @@ async function refreshToken() {
 function getCookie(name) {
   return Cookies.get(name);
 }
-
+let userID = "";
 // Function to fetch the current user's details
 async function fetchCurrentUser() {
   try {
@@ -79,6 +78,9 @@ async function fetchCurrentUser() {
       const data = await response.json();
       if (data.status === 200) {
         const user = data.data;
+        console.log("User data:", user);
+        userID = user._id;
+        console.log("User ID: ", userID);
         displayUserProfile(user);
         displayUserCoverImage(user);
       } else {
@@ -315,8 +317,9 @@ document.getElementById("upload-button").addEventListener("click", () => {
   window.location.href = "upload.html"; // or wherever upload.js is linked
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetchCurrentUser();
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchCurrentUser();
+  fetchCounts();
 });
 
 async function updateProfileDetails(event) {
@@ -410,6 +413,46 @@ async function changePassword(event) {
     alert(
       "Error: An error occurred while changing the password. Please try again."
     );
+  }
+}
+async function fetchCounts() {
+  try {
+    const channelId = userID;
+    // console.log("Channel ID: ", channelId);
+    const accessToken = getCookie("accessToken");
+    if (!accessToken) {
+      throw new Error("Access token is missing");
+    }
+
+    const [subscribersResponse, subscribedToResponse] = await Promise.all([
+      fetch(
+        `http://localhost:8000/api/v1/subscription/count-subscribers/${channelId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          credentials: "include",
+        }
+      ),
+      fetch(`http://localhost:8000/api/v1/subscription/count-subscribed-to`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }),
+    ]);
+    // console.log(subscribersResponse);
+    const subscribersCount = await subscribersResponse.json();
+    const subscribedToCount = await subscribedToResponse.json();
+
+    document.querySelector(".profile-stats .stat:nth-child(1) h2").textContent =
+      subscribersCount.data || 0;
+    document.querySelector(".profile-stats .stat:nth-child(2) h2").textContent =
+      subscribedToCount.data || 0;
+  } catch (error) {
+    console.error("Error fetching counts:", error);
   }
 }
 

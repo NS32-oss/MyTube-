@@ -1,4 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
+let userID = "";
 document.addEventListener("DOMContentLoaded", async () => {
   // Function to check token and fetch user
   checkTokenAndFetchUser();
@@ -52,64 +53,82 @@ document.addEventListener("DOMContentLoaded", async () => {
       ownerSubscribers.textContent = `${0} subscribers`;
     if (videoViews) videoViews.textContent = `${video.views} views`;
 
+    // Fetch the list of subscribed channels for the current user
+    const subscriptionsResponse = await fetch(
+      `http://localhost:8000/api/v1/subscription/getSubscribedToList`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("accessToken")}`,
+        },
+      }
+    );
+
+    if (!subscriptionsResponse.ok) {
+      throw new Error("Failed to fetch subscriptions");
+    }
+
+    const subscriptionsData = await subscriptionsResponse.json();
+    const subscribedChannels = subscriptionsData.data;
+    console.log("Subscribed channels:", subscribedChannels);
+    console.log("Video owner:", video);
+    // Check if the current video's channel is in the user's subscriptions
+    const isSubscribed = subscribedChannels.some(
+      (channel) => channel.channel_id === video.owner._id
+    );
+    
+
+    // Update Subscribe button based on subscription status
+    if (isSubscribed) {
+      console.log("User is subscribed to this channel");
+      subscribeButton.textContent = "Subscribed";
+      subscribeButton.classList.add("subscribed");
+    }
+
     // Play the video
     if (videoElement) videoElement.play();
 
-    // Event Listener for Like Button
-    // if (likeButton) {
-    //     likeButton.addEventListener("click", async () => {
-    //         try {
-    //             const likeResponse = await fetch(`http://localhost:8000/api/v1/video/like/${videoId}`, {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //             });
+    // Event Listener for Subscribe Button
+    // console.log(video);
+    if (subscribeButton) {
+      subscribeButton.addEventListener("click", async () => {
+        try {
+          const subscribeResponse = await fetch(
+            `http://localhost:8000/api/v1/subscription/toggleSubscription/${video.owner._id}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("accessToken")}`,
+              },
+            }
+          );
 
-    //             if (!likeResponse.ok) {
-    //                 throw new Error("Failed to like the video");
-    //             }
+          if (!subscribeResponse.ok) {
+            throw new Error("Failed to subscribe to the channel");
+          }
 
-    //             const likeData = await likeResponse.json();
-    //             console.log("Video liked:", likeData);
-    //             likeButton.classList.add("liked"); // Optional: Add visual feedback for the like
-    //         } catch (error) {
-    //             console.error("Error liking the video:", error);
-    //         }
-    //     });
-    // }
+          const subscribeData = await subscribeResponse.json();
+          // console.log("Subscribed to channel:", subscribeData);
 
-    // // Event Listener for Subscribe Button
-    // if (subscribeButton) {
-    //     subscribeButton.addEventListener("click", async () => {
-    //         try {
-    //             const subscribeResponse = await fetch(`http://localhost:8000/api/v1/subscribe/${video.owner.id}`, {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //             });
-
-    //             if (!subscribeResponse.ok) {
-    //                 throw new Error("Failed to subscribe to the channel");
-    //             }
-
-    //             const subscribeData = await subscribeResponse.json();
-    //             console.log("Subscribed to channel:", subscribeData);
-    //             subscribeButton.textContent = "Subscribed"; // Update button text to indicate subscription
-    //             subscribeButton.classList.add("subscribed"); // Optional: Add visual feedback for the subscription
-    //         } catch (error) {
-    //             console.error("Error subscribing to the channel:", error);
-    //         }
-    //     });
-    // }
+          // Toggle subscription state
+          if (subscribeButton.textContent === "Subscribed") {
+            subscribeButton.textContent = "Subscribe";
+            subscribeButton.classList.remove("subscribed");
+          } else {
+            subscribeButton.textContent = "Subscribed";
+            subscribeButton.classList.add("subscribed");
+          }
+        } catch (error) {
+          console.error("Error subscribing to the channel:", error);
+        }
+      });
+    }
 
     // Event Listener for Close Button
     if (closePlayerButton) {
       closePlayerButton.addEventListener("click", () => {
-        const playerContainer = document.getElementById(
-          "video-player-container-home"
-        );
         if (playerContainer) playerContainer.style.display = "none";
         if (videoElement) videoElement.pause();
         history.back();
@@ -122,7 +141,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Function to check token and fetch user (Dummy function, replace with your actual implementation)
 
-let userID = "";
 
 async function checkTokenAndFetchUser() {
   try {
@@ -235,7 +253,7 @@ function getCookie(name) {
 
 document.querySelector(".user-profile img").addEventListener("click", () => {
   window.location.href = "profile.html";
-});
+}); 
 
 // Comments Section
 document.addEventListener("DOMContentLoaded", function () {
