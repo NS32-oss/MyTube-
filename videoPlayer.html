@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    <link rel="stylesheet" href="styles.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"><!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Link to your CSS file -->
 </head>
+
 <body>
     <!-- Header Section -->
     <header>
@@ -41,7 +44,13 @@
         <p id="video-description-home"></p>
 
         <!-- New Elements Added -->
-        <p id="video-views-home"></p>
+        <div class="video-views-likes">
+            <p id="video-views-home"></p>
+            <button id="like-btn-home">
+                <i class="fas fa-thumbs-up"></i> Like
+            </button>
+        </div>
+
         <div id="video-owner-info-home">
             <button id="owner-profile-btn-home">
                 <img id="owner-avatar-home" src="" alt="Owner Profile">
@@ -50,14 +59,36 @@
             <span id="owner-subscribers-home"></span>
             <button id="subscribe-btn-home">Subscribe</button>
         </div>
-        <button id="like-btn-home">
+        <!-- <button id="like-btn-home">
             <i class="fas fa-thumbs-up"></i> Like
-        </button>
+        </button> -->
         <!-- End of New Elements -->
 
         <button id="close-player-home">Close Player</button>
+
+        <!-- Comment Section -->
+        <h2>Comments</h2>
+        <form id="addCommentForm">
+            <textarea id="commentContent" placeholder="Add a comment"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="comment-section">
+            <!-- Dynamic comments will be injected here -->
+        </div>
+        <div id="editCommentModal" style="display:none;">
+            <textarea id="editCommentContent" placeholder="Edit your comment"></textarea>
+            <button id="saveEditButton">Save</button>
+            <button id="cancelEditButton">Cancel</button>
+        </div>
+
+
+
+
+
+
     </div>
 
     <script src="videoPlayer.js"></script>
 </body>
+
 </html>

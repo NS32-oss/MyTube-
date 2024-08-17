@@ -25,7 +25,6 @@ header {
   height: 110px; /* Ensure the height is consistent */
 }
 
-
 header .logo img {
   height: 110px;
 }
@@ -363,20 +362,26 @@ nav ul li a.active {
 }
 
 /* Video Player Container */
-/* .video-player-container {
+.video-player-container {
   display: none;
   position: fixed;
-  top: 50%;
+  top: 110px; /* Below the header */
   left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 8px;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 15px;
   z-index: 1000;
-  width: 80%;
-  max-width: 700px;
-} */
+  width: 80%; /* Adjust this to control the width of the video player */
+  height: calc(100% - 130px); /* Adjusted height to leave space at the bottom */
+  max-width: 1020px; /* Maximum width for larger screens */
+  overflow-y: auto; /* Enable scrolling for overflow content */
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
 
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 #current-video-home,
 #current-video-your-videos {
   width: 100%;
@@ -386,8 +391,9 @@ nav ul li a.active {
 
 #close-player-home,
 #close-player-your-videos {
-  margin-top: 10px;
-  background-color: #f00;
+  margin-right: 0px;
+  /* margin-top: 10px; */
+  background-color: #3ea6ff;
   color: #fff;
   border: none;
   padding: 10px;
@@ -398,7 +404,7 @@ nav ul li a.active {
 
 #close-player-home:hover,
 #close-player-your-videos:hover {
-  background-color: #c00;
+  background-color: #0570cd;
 }
 
 /* Video Player */
@@ -438,12 +444,16 @@ nav ul li a.active {
 #owner-username-home {
   color: #fff; /* White text for contrast */
   font-weight: bold;
+  font-size: 1.3em;
+  margin-bottom: 7px;
 }
 
 /* Owner Subscribers */
 #owner-subscribers-home {
-  color: #ccc; /* Light gray for contrast */
+  color: #7c1919; /* Light gray for contrast */
   margin-right: 15px;
+  margin-bottom: 10px;
+  left: 0px;
 }
 
 /* Subscribe Button */
@@ -492,28 +502,250 @@ nav ul li a.active {
   background-color: #00cc00; /* Slightly darker green on hover */
 }
 
-
-
-/* Video Player Styles */
-.video-player-container {
-  display: none;
-  position: fixed;
-  top: 110px; /* Below the header */
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.9);
-  padding: 15px;
-  z-index: 1000;
-  width: 80%; /* Adjust this to control the width of the video player */
-  height: calc(100% - 130px); /* Adjusted height to leave space at the bottom */
-  max-width: 1020px; /* Maximum width for larger screens */
-  overflow-y: auto; /* Enable scrolling for overflow content */
-  border-radius: 8px; /* Optional: Add rounded corners */
+/* Ensure video views and like button are on the same row */
+#video-views-home,
+#like-btn-home {
+  display: inline-block;
+  margin-right: 15px; /* Add space between views and like button */
+  vertical-align: middle; /* Align them in the middle */
 }
 
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+/* Make sure owner info is in the correct layout */
+#video-owner-info-home {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-direction: column; /* Stack the items vertically */
+  align-items: flex-start; /* Align items to the start */
+}
+
+/* Owner Profile Button */
+#owner-profile-btn-home {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 5px; /* Add some space between the profile button and subscriber count */
+}
+
+/* Owner Subscribers placed under username */
+#owner-subscribers-home {
+  color: #ccc; /* Light gray for contrast */
+  margin-left: 0px; /* Align under username with some space to the left */
+}
+
+/* Video Views and Likes Container */
+.video-views-likes {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; /* Space below this line */
+}
+
+/* Ensure video views and like button are on the same row */
+#video-views-home {
+  margin-right: 15px; /* Space between views and like button */
+  color: #bbb; /* Light gray for contrast */
+  font-size: 1em;
+}
+
+/* Like Button */
+#like-btn-home {
+  background: none;
+  border: none;
+  color: #fff; /* White text */
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#like-btn-home i {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+/* Owner Info Container */
+#video-owner-info-home {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-direction: column; /* Stack the items vertically */
+  align-items: flex-start; /* Align items to the start */
+}
+
+/* Owner Profile Button */
+#owner-profile-btn-home {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 5px; /* Add some space between the profile button and subscriber count */
+}
+
+/* Owner Subscribers placed under username */
+#owner-subscribers-home {
+  color: #ccc; /* Light gray for contrast */
+  margin-left: 0px; /* Align under username with some space to the left */
+}
+
+#video-description-home {
+  margin-bottom: 0px;
+}
+
+/*comment section*/
+/* Comment styling */
+.comment {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background-color: #202020;
+  border-radius: 6px;
+  position: relative; /* Needed for the options menu positioning */
+}
+
+.commenter-photo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  flex-grow: 1;
+  margin-right: 10px; /* Add space between content and options button */
+  word-wrap: break-word; /* Ensure long words break and wrap to the next line */
+  white-space: normal; /* Allow the text to wrap to the next line */
+}
+
+.commenter-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.comment-text {
+  font-size: 0.85rem;
+  color: #ddd;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.comment-date {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+#addCommentForm {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#commentContent {
+  resize: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #282828;
+  color: #fff;
+}
+
+button[type="submit"] {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background-color: #3ea6ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Options button with vertical three dots */
+.options-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  margin-left: auto; /* Pushes the button to the extreme right */
+  flex-direction: column; /* This makes the dots align vertically */
+}
+
+.options-button span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin: 2px 0; /* Space between dots */
+}
+
+/* Options menu */
+.options-menu {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transform: translateY(3px); /* Move the menu 3px upwards */
+  z-index: 10; /* Ensure the menu appears above other content */
+}
+
+.options-menu.visible {
+  display: block;
+}
+
+.options-menu button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.options-menu button:hover {
+  background-color: #444;
+}
+
+/* Styles for editing comment */
+.edit-mode {
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+}
+
+.edit-mode textarea {
+  background-color: #282828;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.save-button {
+  margin-top: 10px;
+  background-color: #3ea6ff;
+  color: white;
+}
+.edit-textarea {
+  color: #fff;
+  background-color: #202020; /* Light red color */
+  /* You can adjust the color as needed */
 }
 
 /* Active Link Style */
@@ -521,7 +753,6 @@ nav ul li a.active {
   font-weight: bold;
   background-color: #ff0000; /* Change to your preferred color */
 }
-
 
 main {
   flex-grow: 1;
