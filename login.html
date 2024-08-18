@@ -2,43 +2,67 @@
 <html lang="en">
 
 <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Page Title -->
     <title>Login - MyTube</title>
+    
+    <!-- External Stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <!-- Authentication Container -->
     <div class="auth-container">
+        
+        <!-- Header Section -->
         <header>
             <div class="logo">
                 <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
             </div>
         </header>
+        
+        <!-- Main Content -->
         <main class="l">
             <div class="auth-form-container">
+                
+                <!-- Login Form Container -->
                 <div class="auth-form" id="login-form">
                     <h1>Login</h1>
+                    
+                    <!-- Login Form -->
                     <form id="login-form-element" onsubmit="event.preventDefault(); loginUser();">
+                        
+                        <!-- Username or Email Input -->
                         <label for="login-username">Username or Email</label>
                         <input type="text" id="login-username" name="usernameOrEmail" required>
-
+                        
+                        <!-- Password Input -->
                         <label for="login-password">Password</label>
                         <input type="password" id="login-password" name="password" required>
-
+                        
+                        <!-- Login Button -->
                         <button type="submit" id="login-button">Login</button>
+                        
+                        <!-- General Error Message -->
                         <div id="login-general-error" class="general-error"></div>
                     </form>
+                    
+                    <!-- Success Message -->
                     <div id="login-success-message" class="success-message"></div>
+                    
+                    <!-- Link to Register Page -->
                     <p>Don't have an account? <a href="register.html">Register here</a></p>
                 </div>
             </div>
         </main>
     </div>
+    
+    <!-- External JavaScript Files -->
     <script src="login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-
-    <!-- <script src="cookie.js"></script> -->
 </body>
 
 </html>

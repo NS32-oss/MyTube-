@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <!-- Header Section -->
     <header>
         <div class="logo">
             <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
@@ -31,29 +32,27 @@
             </div>
         </div>
     </header>
+    <!-- End of Header Section -->
+
+    <!-- Content Wrapper Section -->
     <div class="content-wrapper">
+        <!-- Navigation Section -->
         <nav>
             <ul>
                 <li><a href="#" id="home-link" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#" id="your-tweets-link" onclick="showSection('your-tweets')"><i class="fas fa-edit"></i>
-                        Your Tweets</a></li>
-                <li><a href="#" id="history-link" onclick="showSection('history')"><i class="fas fa-history"></i>
-                        History</a></li>
-                <li><a href="#" id="playlists-link" onclick="showSection('playlists')"><i class="fas fa-list"></i>
-                        Playlists</a></li>
-                <li><a href="#" id="your-videos-link" onclick="showSection('your-videos')"><i class="fas fa-video"></i>
-                        Your Videos</a></li>
-                <li><a href="#" id="watch-later-link" onclick="showSection('watch-later')"><i class="fas fa-clock"></i>
-                        Watch Later</a></li>
-                <li><a href="#" id="liked-videos-link" onclick="showSection('liked-videos')"><i
-                            class="fas fa-thumbs-up"></i> Liked Videos</a></li>
+                <li><a href="#" id="your-tweets-link" onclick="showSection('your-tweets')"><i class="fas fa-edit"></i> Your Tweets</a></li>
+                <li><a href="#" id="history-link" onclick="showSection('history')"><i class="fas fa-history"></i> History</a></li>
+                <li><a href="#" id="playlists-link" onclick="showSection('playlists')"><i class="fas fa-list"></i> Playlists</a></li>
+                <li><a href="#" id="your-videos-link" onclick="showSection('your-videos')"><i class="fas fa-video"></i> Your Videos</a></li>
+                <li><a href="#" id="watch-later-link" onclick="showSection('watch-later')"><i class="fas fa-clock"></i> Watch Later</a></li>
+                <li><a href="#" id="liked-videos-link" onclick="showSection('liked-videos')"><i class="fas fa-thumbs-up"></i> Liked Videos</a></li>
             </ul>
         </nav>
+        <!-- End of Navigation Section -->
 
+        <!-- Main Content Section -->
         <main class="main-n">
-
-
-
+            <!-- Home Section -->
             <section id="home" class="section">
                 <div id="video-grid-home" class="video-grid"></div>
 
@@ -65,7 +64,7 @@
                     <h3 id="video-title-home"></h3>
                     <p id="video-description-home"></p>
 
-                    <!-- New Elements Added -->
+                    <!-- Video Owner and Interaction Elements -->
                     <p id="video-views-home"></p>
                     <div id="video-owner-info-home">
                         <button id="owner-profile-btn-home">
@@ -78,30 +77,35 @@
                     <button id="like-btn-home">
                         <i class="fas fa-thumbs-up"></i> Like
                     </button>
-                    <!-- End of New Elements -->
+                    <!-- End of Video Owner and Interaction Elements -->
 
-                    <button id="close-player">Close Player</button>
+                    <button id="close-player-home">Close Player</button>
                 </div>
-
             </section>
+            <!-- End of Home Section -->
 
-
-
+            <!-- Your Tweets Section -->
             <section id="your-tweets" class="section" style="display: none;">
                 <h2>Your Tweets</h2>
                 <p>Content for Your Tweets section.</p>
             </section>
+            <!-- End of Your Tweets Section -->
+
+            <!-- History Section -->
             <section id="history" class="section" style="display: none;">
                 <h2>History</h2>
                 <p>Content for History section.</p>
             </section>
+            <!-- End of History Section -->
+
+            <!-- Playlists Section -->
             <section id="playlists" class="section" style="display: none;">
                 <h2>Playlists</h2>
                 <p>Content for Playlists section.</p>
             </section>
+            <!-- End of Playlists Section -->
 
-
-
+            <!-- Your Videos Section -->
             <section id="your-videos" class="section" style="display: none;">
                 <div class="videos-summary">
                     <div class="summary-item">
@@ -123,27 +127,34 @@
                     </video>
                     <h3 id="video-title-your-videos"></h3>
                     <p id="video-description-your-videos"></p>
-                    <button id="close-player">Close Player</button>
+                    <button id="close-player-your-videos">Close Player</button>
                 </div>
             </section>
+            <!-- End of Your Videos Section -->
 
-
-
-
-
+            <!-- Watch Later Section -->
             <section id="watch-later" class="section" style="display: none;">
                 <h2>Watch Later</h2>
                 <p>Content for Watch Later section.</p>
             </section>
+            <!-- End of Watch Later Section -->
+
+            <!-- Liked Videos Section -->
             <section id="liked-videos" class="section" style="display: none;">
                 <h2>Liked Videos</h2>
                 <p>Content for Liked Videos section.</p>
             </section>
+            <!-- End of Liked Videos Section -->
         </main>
+        <!-- End of Main Content Section -->
     </div>
+    <!-- End of Content Wrapper Section -->
+
+    <!-- Scripts Section -->
     <script src="login.js"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <!-- End of Scripts Section -->
 </body>
 
 </html>

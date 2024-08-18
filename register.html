@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - MyTube</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the stylesheet -->
 </head>
 
 <body>
     <div class="auth-container">
         <header>
             <div class="logo">
+                <!-- Logo image -->
                 <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
             </div>
         </header>
@@ -19,6 +20,7 @@
             <div class="auth-form-container">
                 <div class="auth-form" id="register-form">
                     <h1>Register</h1>
+                    <!-- Registration form -->
                     <form id="register-form-element" onsubmit="event.preventDefault(); registerUser();">
                         <label for="register-username">Username</label>
                         <input type="text" id="register-username" name="username" required>
@@ -39,14 +41,17 @@
                         <input type="password" id="register-password" name="password" required>
 
                         <button type="submit">Register</button>
+                        <!-- General error message -->
                         <div id="register-general-error" class="general-error"></div>
                     </form>
+                    <!-- Success message -->
                     <div id="register-success-message" class="success-message"></div>
                     <p>Already have an account? <a href="login.html">Login here</a></p>
                 </div>
             </div>
         </main>
     </div>
+    <!-- JavaScript file for registration logic -->
     <script src="register.js"></script>
 </body>
 

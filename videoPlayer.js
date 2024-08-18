@@ -26,6 +26,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await response.json();
     const video = data.data;
 
+    // Get subscriber count
+    const subscribersResponse = await fetch(
+      `http://localhost:8000/api/v1/subscription/count-subscribers/${video.owner._id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("accessToken")}`,
+        },
+      }
+    );
+    const subscribersData = await subscribersResponse.json();
+    let subscribers = subscribersData.data;
+
     // Get elements from the DOM
     const playerContainer = document.getElementById(
       "video-player-container-home"
@@ -50,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ownerAvatar.src = video.owner.avatar || "https://via.placeholder.com/36";
     if (ownerUsername) ownerUsername.textContent = video.owner.username;
     if (ownerSubscribers)
-      ownerSubscribers.textContent = `${0} subscribers`;
+      ownerSubscribers.textContent = `${subscribers} subscribers`;
     if (videoViews) videoViews.textContent = `${video.views} views`;
 
     // Fetch the list of subscribed channels for the current user
@@ -71,17 +85,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const subscriptionsData = await subscriptionsResponse.json();
     const subscribedChannels = subscriptionsData.data;
-    console.log("Subscribed channels:", subscribedChannels);
-    console.log("Video owner:", video);
     // Check if the current video's channel is in the user's subscriptions
     const isSubscribed = subscribedChannels.some(
       (channel) => channel.channel_id === video.owner._id
     );
-    
 
     // Update Subscribe button based on subscription status
     if (isSubscribed) {
-      console.log("User is subscribed to this channel");
       subscribeButton.textContent = "Subscribed";
       subscribeButton.classList.add("subscribed");
     }
@@ -90,7 +100,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (videoElement) videoElement.play();
 
     // Event Listener for Subscribe Button
-    // console.log(video);
     if (subscribeButton) {
       subscribeButton.addEventListener("click", async () => {
         try {
@@ -110,15 +119,21 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
 
           const subscribeData = await subscribeResponse.json();
-          // console.log("Subscribed to channel:", subscribeData);
 
           // Toggle subscription state
           if (subscribeButton.textContent === "Subscribed") {
             subscribeButton.textContent = "Subscribe";
             subscribeButton.classList.remove("subscribed");
+            subscribers -= 1; // Decrease subscriber count
           } else {
             subscribeButton.textContent = "Subscribed";
             subscribeButton.classList.add("subscribed");
+            subscribers += 1; // Increase subscriber count
+          }
+
+          // Update the subscriber count in the DOM
+          if (ownerSubscribers) {
+            ownerSubscribers.textContent = `${subscribers} subscribers`;
           }
         } catch (error) {
           console.error("Error subscribing to the channel:", error);
@@ -138,6 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error fetching video data:", error);
   }
 });
+
 
 // Function to check token and fetch user (Dummy function, replace with your actual implementation)
 

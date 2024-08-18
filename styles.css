@@ -258,19 +258,20 @@ nav ul li a.active {
 .video-grid {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   padding: 10px 0;
 }
 
 /* Video Card */
 .video-card {
-  width: 230px;
-  margin-right: 10px;
+  width: 280px;
+  /* margin-right: 10px; */
   background-color: #181818;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
+  position: relative; /* Relative positioning for the video card */
 }
 
 /* Video Thumbnail */
@@ -299,8 +300,77 @@ nav ul li a.active {
 /* Video Info */
 .video-info {
   display: flex;
-  padding: 1px;
+  /* flex-direction: column; */
+  padding: 10px; /* Add padding for spacing */
+  padding-bottom: 0 ;
+  position: relative; /* Allow for absolute positioning of children */
 }
+
+/* Three Dots Menu */
+.three-dots-menu {
+  position: absolute;
+  bottom: 5px; /* Position at the bottom of the video-info */
+  right: 5px; /* Position at the right of the video-info */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dot {
+  width: 4px; /* Slightly larger dots for visibility */
+  height: 4px;
+  background-color: #fff; /* White color for better visibility */
+  border-radius: 50%;
+  margin: 2px 0; /* Space between dots */
+}
+
+/* Three Dots Menu */
+/* .three-dots-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+} */
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #333;
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Dropdown Menu List */
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Dropdown Menu Items */
+.dropdown-menu li {
+  border-bottom: 1px solid #444;
+}
+
+.dropdown-menu li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 8px 12px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+  background-color: #575757;
+}
+
 
 /* Channel Icon Container */
 .channel-icon-container {
@@ -326,6 +396,7 @@ nav ul li a.active {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  margin-right: 4px; /* Add margin to create space for the three dots menu */
 }
 
 .video-title {
@@ -342,15 +413,21 @@ nav ul li a.active {
   -webkit-box-orient: vertical; /* Vertical box orientation */
 }
 
-.video-channel,
-.video-stats {
+.video-channel {
   color: #aaa;
   font-size: 0.85rem;
   margin: 0;
   text-align: left; /* Left-align the username */
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
 }
 
 .video-stats {
+  color: #aaa;
+  font-size: 0.85rem;
+  margin: 0;
+  text-align: left; /* Left-align the stats */
   display: flex;
   gap: 10px;
   align-items: center;
@@ -361,6 +438,7 @@ nav ul li a.active {
   transform: scale(1.009);
   transition: transform 0.3s ease;
 }
+
 
 /* Video Player Container */
 .video-player-container {
@@ -804,7 +882,7 @@ main {
 
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: 20px;
 }
 
