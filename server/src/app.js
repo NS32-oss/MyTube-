@@ -46,4 +46,5 @@ app.use("/api/v1/subscription", subscriptionRouter);
 app.use("/api/v1/video", videoRouter);
 app.use("/api/v1/comment", commentRouter);
 
+console.log("App.js is running");
 export default app;
