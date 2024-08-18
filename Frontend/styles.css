@@ -159,14 +159,14 @@ nav ul li a:hover {
   border: none;
   cursor: pointer;
   color: #fff;
-  position: relative; /* This makes sure the dropdown is positioned relative to this button */
+  position: relative; /* Position the dropdown relative to this button */
 }
 
 /* Dropdown menu styling */
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 70%; /* Position the dropdown directly below the button */
+  top: 70%; /* Adjust this to position the dropdown correctly */
   right: 0;
   background-color: #202020;
   border: 1px solid #444;
@@ -175,7 +175,8 @@ nav ul li a:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   color: #fff;
   z-index: 1000; /* Ensure it appears above other elements */
-  min-width: 125px; /* Set a minimum width for the dropdown */
+  min-width: 150px; /* Adjust this value based on the content */
+  height: 80px; /* Increase the height to cover both buttons */
 }
 
 .dropdown-menu button {
@@ -195,6 +196,7 @@ nav ul li a:hover {
 .dropdown-menu button:hover {
   background-color: #cc0000; /* Change color on hover */
 }
+
 
 /* Active Link Style */
 nav ul li a.active {

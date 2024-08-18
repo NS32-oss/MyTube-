@@ -1,49 +1,36 @@
 const urlParams = new URLSearchParams(window.location.search);
 let userID = "";
+
 document.addEventListener("DOMContentLoaded", async () => {
-  // Function to check token and fetch user
-  checkTokenAndFetchUser();
+  // Check token and fetch user
+  await checkTokenAndFetchUser();
 
   // Get the video ID from the URL
   const videoId = urlParams.get("id");
 
   try {
     // Fetch video data
-    const response = await fetch(
-      `http://localhost:8000/api/v1/video/change/${videoId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const videoResponse = await fetch(`http://localhost:8000/api/v1/video/change/${videoId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch video data");
-    }
+    if (!videoResponse.ok) throw new Error("Failed to fetch video data");
 
-    const data = await response.json();
-    const video = data.data;
+    const videoData = await videoResponse.json();
+    const video = videoData.data;
 
     // Get subscriber count
-    const subscribersResponse = await fetch(
-      `http://localhost:8000/api/v1/subscription/count-subscribers/${video.owner._id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("accessToken")}`,
-        },
-      }
-    );
+    const subscribersResponse = await fetch(`http://localhost:8000/api/v1/subscription/count-subscribers/${video.owner._id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
+    });
+
     const subscribersData = await subscribersResponse.json();
     let subscribers = subscribersData.data;
 
     // Get elements from the DOM
-    const playerContainer = document.getElementById(
-      "video-player-container-home"
-    );
+    const playerContainer = document.getElementById("video-player-container-home");
     const videoElement = document.getElementById("current-video-home");
     const videoTitle = document.getElementById("video-title-home");
     const videoDescription = document.getElementById("video-description-home");
@@ -60,35 +47,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (videoElement) videoElement.src = video.videoFile;
     if (videoTitle) videoTitle.textContent = video.title;
     if (videoDescription) videoDescription.textContent = video.description;
-    if (ownerAvatar)
-      ownerAvatar.src = video.owner.avatar || "https://via.placeholder.com/36";
+    if (ownerAvatar) ownerAvatar.src = video.owner.avatar || "https://via.placeholder.com/36";
     if (ownerUsername) ownerUsername.textContent = video.owner.username;
-    if (ownerSubscribers)
-      ownerSubscribers.textContent = `${subscribers} subscribers`;
+    if (ownerSubscribers) ownerSubscribers.textContent = `${subscribers} subscribers`;
     if (videoViews) videoViews.textContent = `${video.views} views`;
 
-    // Fetch the list of subscribed channels for the current user
-    const subscriptionsResponse = await fetch(
-      `http://localhost:8000/api/v1/subscription/getSubscribedToList`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getCookie("accessToken")}`,
-        },
-      }
-    );
+    // Fetch subscribed channels for the current user
+    const subscriptionsResponse = await fetch(`http://localhost:8000/api/v1/subscription/getSubscribedToList`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
+    });
 
-    if (!subscriptionsResponse.ok) {
-      throw new Error("Failed to fetch subscriptions");
-    }
+    if (!subscriptionsResponse.ok) throw new Error("Failed to fetch subscriptions");
 
     const subscriptionsData = await subscriptionsResponse.json();
     const subscribedChannels = subscriptionsData.data;
+
     // Check if the current video's channel is in the user's subscriptions
-    const isSubscribed = subscribedChannels.some(
-      (channel) => channel.channel_id === video.owner._id
-    );
+    const isSubscribed = subscribedChannels.some(channel => channel.channel_id === video.owner._id);
 
     // Update Subscribe button based on subscription status
     if (isSubscribed) {
@@ -103,20 +79,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (subscribeButton) {
       subscribeButton.addEventListener("click", async () => {
         try {
-          const subscribeResponse = await fetch(
-            `http://localhost:8000/api/v1/subscription/toggleSubscription/${video.owner._id}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getCookie("accessToken")}`,
-              },
-            }
-          );
+          const subscribeResponse = await fetch(`http://localhost:8000/api/v1/subscription/toggleSubscription/${video.owner._id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
+          });
 
-          if (!subscribeResponse.ok) {
-            throw new Error("Failed to subscribe to the channel");
-          }
+          if (!subscribeResponse.ok) throw new Error("Failed to subscribe to the channel");
 
           const subscribeData = await subscribeResponse.json();
 
@@ -131,10 +99,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             subscribers += 1; // Increase subscriber count
           }
 
-          // Update the subscriber count in the DOM
-          if (ownerSubscribers) {
-            ownerSubscribers.textContent = `${subscribers} subscribers`;
-          }
+          // Update subscriber count in the DOM
+          if (ownerSubscribers) ownerSubscribers.textContent = `${subscribers} subscribers`;
         } catch (error) {
           console.error("Error subscribing to the channel:", error);
         }
@@ -149,15 +115,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         history.back();
       });
     }
+
+    // Fetch initial comments when the page loads
+    fetchComments();
+
   } catch (error) {
     console.error("Error fetching video data:", error);
   }
 });
 
-
-// Function to check token and fetch user (Dummy function, replace with your actual implementation)
-
-
+// Function to check token and fetch user
 async function checkTokenAndFetchUser() {
   try {
     const accessToken = getCookie("accessToken");
@@ -168,17 +135,11 @@ async function checkTokenAndFetchUser() {
       return;
     }
 
-    const response = await fetch(
-      "http://localhost:8000/api/v1/users/current-user",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-      }
-    );
+    const response = await fetch("http://localhost:8000/api/v1/users/current-user", {
+      method: "GET",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+      credentials: "include",
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -207,12 +168,7 @@ async function checkTokenAndFetchUser() {
 
 function displayUserProfile(user) {
   const userProfileImg = document.querySelector(".user-profile img");
-  if (user.avatar) {
-    userProfileImg.src = user.avatar;
-  } else {
-    userProfileImg.src =
-      "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
-  }
+  userProfileImg.src = user.avatar || "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
 }
 
 function handleTokenError() {
@@ -222,13 +178,10 @@ function handleTokenError() {
 
 async function refreshToken() {
   try {
-    const response = await fetch(
-      "http://localhost:8000/api/v1/users/refreshAccessToken",
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
+    const response = await fetch("http://localhost:8000/api/v1/users/refreshAccessToken", {
+      method: "POST",
+      credentials: "include",
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -247,11 +200,7 @@ async function refreshToken() {
         handleTokenError();
       }
     } else {
-      console.error(
-        "Failed to refresh token, HTTP error:",
-        response.status,
-        response.statusText
-      );
+      console.error("Failed to refresh token, HTTP error:", response.status, response.statusText);
       handleTokenError();
     }
   } catch (error) {
@@ -267,14 +216,14 @@ function getCookie(name) {
   return null;
 }
 
+// Handle profile redirection
 document.querySelector(".user-profile img").addEventListener("click", () => {
   window.location.href = "profile.html";
-}); 
+});
 
 // Comments Section
-document.addEventListener("DOMContentLoaded", function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const videoId = urlParams.get("id"); // Fetch video ID from URL
+document.addEventListener("DOMContentLoaded", () => {
+  const videoId = urlParams.get("id");
   const commentsContainer = document.querySelector(".comment-section");
   const accessToken = getCookie("accessToken");
   let currentCommentId = null; // Store the ID of the comment being edited
@@ -296,7 +245,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const commenterPhotoDiv = document.createElement("div");
     commenterPhotoDiv.classList.add("commenter-photo");
-
     const commenterImg = document.createElement("img");
     commenterImg.src = comment.user.avatar;
     commenterImg.alt = `${comment.user.username}'s avatar`;
@@ -304,7 +252,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const commentContentDiv = document.createElement("div");
     commentContentDiv.classList.add("comment-content");
-
     const commenterNameDiv = document.createElement("div");
     commenterNameDiv.classList.add("commenter-name");
     commenterNameDiv.textContent = comment.user.username;
@@ -341,29 +288,19 @@ document.addEventListener("DOMContentLoaded", function () {
         currentCommentId = comment._id;
         commentTextDiv.innerHTML = `<textarea class="edit-textarea">${comment.content}</textarea>
                                           <button class="save-button">Save</button>`;
-        document
-          .querySelector(".save-button")
-          .addEventListener("click", () => saveCommentEdit(comment._id));
+        document.querySelector(".save-button").addEventListener("click", () => saveCommentEdit(comment._id));
       });
 
       const deleteOption = document.createElement("button");
       deleteOption.textContent = "Delete";
       deleteOption.addEventListener("click", async () => {
         try {
-          const response = await fetch(
-            `http://localhost:8000/api/v1/comment/${comment._id}`,
-            {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
+          const deleteResponse = await fetch(`http://localhost:8000/api/v1/comment/${comment._id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+          });
 
-          if (!response.ok) {
-            throw new Error("Failed to delete comment");
-          }
+          if (!deleteResponse.ok) throw new Error("Failed to delete comment");
 
           commentDiv.remove(); // Remove the comment from the DOM
         } catch (error) {
@@ -393,10 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Toggle options menu visibility
     optionsButton.addEventListener("click", () => {
       // Close any other open options menus
-      const allOptionsMenus = document.querySelectorAll(
-        ".options-menu.visible"
-      );
-      allOptionsMenus.forEach((menu) => {
+      document.querySelectorAll(".options-menu.visible").forEach(menu => {
         if (menu !== optionsMenu) {
           menu.classList.remove("visible");
         }
@@ -409,9 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to save the edited comment
   async function saveCommentEdit(commentId) {
-    const newContent = document.querySelector(
-      `.comment[data-id="${commentId}"] .edit-textarea`
-    ).value;
+    const newContent = document.querySelector(`.comment[data-id="${commentId}"] .edit-textarea`).value;
 
     if (!newContent) {
       alert("Comment can't be empty");
@@ -419,102 +351,67 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/comment/${commentId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ content: newContent }),
-        }
-      );
+      const response = await fetch(`http://localhost:8000/api/v1/comment/${commentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ content: newContent }),
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to update comment");
-      }
+      if (!response.ok) throw new Error("Failed to update comment");
 
       const { data: updatedComment } = await response.json();
-      const commentTextDiv = document.querySelector(
-        `.comment[data-id="${commentId}"] .comment-text`
-      );
+      const commentTextDiv = document.querySelector(`.comment[data-id="${commentId}"] .comment-text`);
       commentTextDiv.textContent = updatedComment.content;
-      const optionsMenu = document.querySelector(
-        `.comment[data-id="${commentId}"] .options-menu`
-      );
-      if (optionsMenu) {
-        optionsMenu.classList.remove("visible");
-      }
+      const optionsMenu = document.querySelector(`.comment[data-id="${commentId}"] .options-menu`);
+      if (optionsMenu) optionsMenu.classList.remove("visible");
     } catch (error) {
       console.error("Error updating comment:", error);
     }
   }
-
-  // Fetch initial comments when the page loads
   fetchComments();
-
   // Function to fetch comments from the backend
   async function fetchComments() {
     try {
       commentsContainer.innerHTML = "";
 
-      const response = await fetch(
-        `http://localhost:8000/api/v1/comment/${videoId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:8000/api/v1/comment/${videoId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
+      if (!response.ok) throw new Error("Failed to fetch comments");
 
       const { data: comments } = await response.json();
-      comments.reverse().forEach((comment) => renderComment(comment)); // Display comments with newest on top
+      comments.reverse().forEach(comment => renderComment(comment)); // Display comments with newest on top
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
   }
 
   // Handle comment submission
-  document
-    .querySelector("#addCommentForm")
-    .addEventListener("submit", async function (e) {
-      e.preventDefault();
+  document.querySelector("#addCommentForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const content = document.querySelector("#commentContent").value;
-      if (!content) {
-        alert("Comment can't be empty");
-        return;
-      }
+    const content = document.querySelector("#commentContent").value;
+    if (!content) {
+      alert("Comment can't be empty");
+      return;
+    }
 
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/v1/comment/${videoId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ content }),
-          }
-        );
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/comment/${videoId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ content }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to add comment");
-        }
+      if (!response.ok) throw new Error("Failed to add comment");
 
-        const { data: newComment } = await response.json();
-        renderComment(newComment); // Insert the new comment at the top of the comments list
-        document.querySelector("#commentContent").value = ""; // Clear the input field after submission
-      } catch (error) {
-        console.error("Error adding comment:", error);
-      }
-    });
+      const { data: newComment } = await response.json();
+      renderComment(newComment); // Insert the new comment at the top of the comments list
+      document.querySelector("#commentContent").value = ""; // Clear the input field after submission
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  });
 });

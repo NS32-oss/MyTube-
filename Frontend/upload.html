@@ -10,39 +10,42 @@
 
 <body>
     <header>
-        <!-- By clicking on the logo the user should get redirected to index.html -->
+        <!-- Redirects to index.html when the logo is clicked -->
         <a href="index.html">
             <div class="logo">
                 <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
             </div>
         </a>
-        
     </header>
     <main class="upload-main">
+        <!-- Step 1: Upload Video -->
         <div id="step-1" class="upload-step">
             <h2>Step 1: Upload Video</h2>
             <input type="file" id="video-file" accept="video/*">
-            <button onclick="backToHome()">Back</button> <!-- Back button to home page -->
-            <button onclick="nextStep(2)" class="next-button">Next</button>
+            <button onclick="backToHome()">Back</button> <!-- Button to navigate back to home -->
+            <button onclick="nextStep(2)" class="next-button">Next</button> <!-- Button to proceed to the next step -->
         </div>
+        
+        <!-- Step 2: Upload Thumbnail -->
         <div id="step-2" class="upload-step" style="display: none;">
             <h2>Step 2: Upload Thumbnail</h2>
             <input type="file" id="thumbnail-file" accept="image/*">
-            <button onclick="nextStep(1)" class="back-button">Back</button>
-            <button onclick="nextStep(3)" class="next-button">Next</button>
+            <button onclick="nextStep(1)" class="back-button">Back</button> <!-- Button to go back to the previous step -->
+            <button onclick="nextStep(3)" class="next-button">Next</button> <!-- Button to proceed to the next step -->
         </div>
+        
+        <!-- Step 3: Video Details -->
         <div id="step-3" class="upload-step" style="display: none;">
             <h2>Step 3: Video Details</h2>
             <input type="text" id="video-title" placeholder="Title">
             <textarea id="video-description" placeholder="Description"></textarea>
-            <button onclick="nextStep(2)" class="back-button">Back</button>
-            <button onclick="submitVideo()">Submit</button>
+            <button onclick="nextStep(2)" class="back-button">Back</button> <!-- Button to go back to the previous step -->
+            <button onclick="submitVideo()">Submit</button> <!-- Button to submit the video -->
         </div>
     </main>
-    <!-- <div id="message" class="success-message" style="display: none;"></div> -->
+    <!-- Include JavaScript libraries and scripts -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
     <script src="upload.js"></script>
-
 </body>
 
 </html>

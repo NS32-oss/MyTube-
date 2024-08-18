@@ -424,7 +424,7 @@ async function fetchCounts() {
       throw new Error("Access token is missing");
     }
 
-    const [subscribersResponse, subscribedToResponse] = await Promise.all([
+    const [subscribersResponse, subscribedToResponse,views] = await Promise.all([
       fetch(
         `http://localhost:8000/api/v1/subscription/count-subscribers/${channelId}`,
         {
@@ -442,15 +442,28 @@ async function fetchCounts() {
         },
         credentials: "include",
       }),
+      fetch(`http://localhost:8000/api/v1/video/views`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }),
     ]);
+    // total no. of views of current user
+
+
     // console.log(subscribersResponse);
     const subscribersCount = await subscribersResponse.json();
     const subscribedToCount = await subscribedToResponse.json();
+    const viewsCount = await views.json();
 
     document.querySelector(".profile-stats .stat:nth-child(1) h2").textContent =
       subscribersCount.data || 0;
     document.querySelector(".profile-stats .stat:nth-child(2) h2").textContent =
       subscribedToCount.data || 0;
+    document.querySelector(".profile-stats .stat:nth-child(3) h2").textContent =
+      viewsCount.data || 0;
   } catch (error) {
     console.error("Error fetching counts:", error);
   }

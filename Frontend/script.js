@@ -66,6 +66,11 @@ async function loadYourVideos() {
     });
     const result = await response.json();
     if (result.status === 200) {
+      //calculate total views of all videos
+      let totalViews = 0;
+      result.data.forEach((video) => totalViews += video.views);
+      const totalViewsElement = document.getElementById("total-views");
+      if (totalViewsElement) totalViewsElement.textContent = totalViews;
       const totalVideosElement = document.getElementById("total-videos");
       if (totalVideosElement) totalVideosElement.textContent = result.data.length;
       renderVideos(result.data, null);
@@ -75,6 +80,37 @@ async function loadYourVideos() {
   } catch (error) {
     console.error("Error:", error);
   }
+}
+
+function timeAgo(date) {
+  const now = new Date();
+  const seconds = Math.floor((now - date) / 1000);
+  const interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) return `${interval} years ago`;
+  if (interval === 1) return `1 year ago`;
+
+  const months = Math.floor(seconds / 2592000);
+  if (months > 1) return `${months} months ago`;
+  if (months === 1) return `1 month ago`;
+
+  const weeks = Math.floor(seconds / 604800);
+  if (weeks > 1) return `${weeks} weeks ago`;
+  if (weeks === 1) return `1 week ago`;
+
+  const days = Math.floor(seconds / 86400);
+  if (days > 1) return `${days} days ago`;
+  if (days === 1) return `1 day ago`;
+
+  const hours = Math.floor(seconds / 3600);
+  if (hours > 1) return `${hours} hours ago`;
+  if (hours === 1) return `1 hour ago`;
+
+  const minutes = Math.floor(seconds / 60);
+  if (minutes > 1) return `${minutes} minutes ago`;
+  if (minutes === 1) return `1 minute ago`;
+
+  return `Just now`;
 }
 
 function renderVideos(videos, section) {
@@ -90,7 +126,8 @@ function renderVideos(videos, section) {
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
 
-    const daysAgo = Math.floor((new Date() - new Date(video.createdAt)) / (1000 * 60 * 60 * 24));
+    const uploadDate = new Date(video.createdAt);
+    const timeAgoText = timeAgo(uploadDate);
     const videoDuration = video.duration.toFixed(2);
     const videoId = video._id;
 
@@ -106,7 +143,7 @@ function renderVideos(videos, section) {
         <div class="video-details">
           <h3 class="video-title">${video.title}</h3>
           <p class="video-channel">${video.owner.username}</p>
-          <p class="video-stats">${video.views} views • ${daysAgo} days ago</p>
+          <p class="video-stats">${video.views} views • ${timeAgoText}</p>
         </div>
         <div class="three-dots-menu">
           <span class="dot"></span>
@@ -289,3 +326,19 @@ function setupDropdownMenus() {
     });
   });
 }
+
+document
+  .getElementById("video-dropdown-button")
+  .addEventListener("click", function (event) {
+    const dropdownMenu = document.getElementById("video-dropdown-menu");
+    dropdownMenu.style.display =
+      dropdownMenu.style.display === "block" ? "none" : "block";
+    event.stopPropagation();
+  });
+
+document.addEventListener("click", function () {
+  const dropdownMenu = document.getElementById("video-dropdown-menu");
+  if (dropdownMenu.style.display === "block") {
+    dropdownMenu.style.display = "none";
+  }
+});

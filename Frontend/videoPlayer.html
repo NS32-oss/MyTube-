@@ -7,26 +7,33 @@
     <title>Video Player</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Link to your CSS file -->
 </head>
 
 <body>
     <!-- Header Section -->
     <header>
+        <!-- Logo -->
         <div class="logo">
-            <a href="index.html"><img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo"></a>
+            <a href="index.html">
+                <img src="https://i.ibb.co/QHDThY7/image-removebg.png" alt="MyTube Logo">
+            </a>
         </div>
+        <!-- Search Bar -->
         <div class="search-bar">
             <input type="text" placeholder="Search">
             <button><i class="fas fa-search"></i></button>
         </div>
+        <!-- User Actions -->
         <div class="user-actions">
+            <!-- Video Dropdown Menu -->
             <button id="video-dropdown-button"><i class="fas fa-video"></i></button>
             <div id="video-dropdown-menu" class="dropdown-menu">
                 <button onclick="window.location.href='upload.html'">Upload Video</button>
                 <button onclick="createPost()">Create Post</button>
             </div>
+            <!-- Notifications -->
             <button><i class="fas fa-bell"></i></button>
+            <!-- User Profile -->
             <div class="user-profile">
                 <img src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
                     alt="User Profile">
@@ -36,6 +43,7 @@
 
     <!-- Video Player Section -->
     <div id="video-player-container-home" class="video-player-container">
+        <!-- Video Player -->
         <video id="current-video-home" controls>
             <source src="" type="video/mp4">
             Your browser does not support the video tag.
@@ -43,7 +51,7 @@
         <h3 id="video-title-home"></h3>
         <p id="video-description-home"></p>
 
-        <!-- New Elements Added -->
+        <!-- Video Views and Likes -->
         <div class="video-views-likes">
             <p id="video-views-home"></p>
             <button id="like-btn-home">
@@ -51,6 +59,7 @@
             </button>
         </div>
 
+        <!-- Video Owner Information -->
         <div id="video-owner-info-home">
             <button id="owner-profile-btn-home">
                 <img id="owner-avatar-home" src="" alt="Owner Profile">
@@ -59,11 +68,8 @@
             <span id="owner-subscribers-home"></span>
             <button id="subscribe-btn-home">Subscribe</button>
         </div>
-        <!-- <button id="like-btn-home">
-            <i class="fas fa-thumbs-up"></i> Like
-        </button> -->
-        <!-- End of New Elements -->
 
+        <!-- Close Player Button -->
         <button id="close-player-home">Close Player</button>
 
         <!-- Comment Section -->
@@ -75,17 +81,13 @@
         <div class="comment-section">
             <!-- Dynamic comments will be injected here -->
         </div>
+
+        <!-- Edit Comment Modal -->
         <div id="editCommentModal" style="display:none;">
             <textarea id="editCommentContent" placeholder="Edit your comment"></textarea>
             <button id="saveEditButton">Save</button>
             <button id="cancelEditButton">Cancel</button>
         </div>
-
-
-
-
-
-
     </div>
 
     <script src="videoPlayer.js"></script>
