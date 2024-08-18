@@ -1,48 +1,19 @@
-import 'dotenv/config';
+import 'dotenv/config'; // Automatically loads environment variables from .env file
 import app from './app.js';
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import { DB_NAME } from './constants.js';
-import connectDB from "./db/index.js";
+import connectDB from './db/index.js';
 
-// dotenv.config({ path: "./.env" });
-
+// Connect to the database
 connectDB()
-.then(()=>{
-    app.listen(process.env.PORT||8001, () => {
-        console.log(`Server is running on port ${process.env.PORT||8000}`);
-      });
-})
-.catch((error) => {
-  console.error("MONGODB connection error :", error);
-  process.exit(1);
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  .then(() => {
+    // Use the PORT environment variable, default to 8001 if not set (for local dev)
+    const port = process.env.PORT || 8001;
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('MONGODB connection error:', error);
+    process.exit(1);
+  });
