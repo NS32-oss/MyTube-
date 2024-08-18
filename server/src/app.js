@@ -8,18 +8,22 @@ const app = express();
 const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:3000',
-  'https://example.com'
+  'https://example.com',
+  'https://my-tube-app.vercel.app' // Add your Vercel URL here
 ];
+
+
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin === 'null') {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
       }
     },
+    
     credentials: true, // Allows cookies to be sent and received
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
