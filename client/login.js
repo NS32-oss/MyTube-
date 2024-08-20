@@ -25,7 +25,7 @@ async function loginUser() {
 
   try {
     // Send login request
-    const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/users/login`, {
+    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/users/login`, {
       method: "POST",
       body: new URLSearchParams(formData),
       headers: {
@@ -36,6 +36,7 @@ async function loginUser() {
 
     // Parse response data
     const data = await response.json();
+    console.log(data);
 
     // Check if login was successful
     if (response.ok && data.status === 200 && data.message === "User logged in successfully") {
@@ -48,8 +49,8 @@ async function loginUser() {
       const { accessToken, refreshToken } = data.data;
 
       // Set cookies using Cookies library
-      setCookie('accessToken', accessToken, 2);  // No secure attribute for local testing
-      setCookie('refreshToken', refreshToken, 7); // Assuming refresh token is valid for 7 days
+      setCookie('accessToken', accessToken, 20);  // No secure attribute for local testing
+      setCookie('refreshToken', refreshToken, 70); // Assuming refresh token is valid for 7 days
 
       // Update button style and redirect after a delay
       loginButton.classList.add("success");
@@ -62,6 +63,7 @@ async function loginUser() {
     }
   } catch (error) {
     // Handle and display errors
+    console.error("An error occurred:", error);
     displayError("An error occurred. Please try again.");
   }
 }

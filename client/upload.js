@@ -39,7 +39,7 @@ async function submitVideo() {
 
   try {
     const accessToken = Cookies.get("accessToken"); // Get the access token from cookies
-    const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/video/upload`, {
+    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/video/upload`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`, // Set authorization header
