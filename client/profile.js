@@ -11,7 +11,7 @@ function handleTokenError() {
 async function refreshToken() {
   try {
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/refresh-token",
+      "${process.env.MyTube_APP_URL}/api/v1/users/refresh-token",
       {
         method: "POST",
         credentials: "include",
@@ -63,7 +63,7 @@ async function fetchCurrentUser() {
     }
 
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/current-user",
+      "${process.env.MyTube_APP_URL}/api/v1/users/current-user",
       {
         method: "GET",
         headers: {
@@ -155,7 +155,7 @@ async function updateProfileImage(event) {
     }
 
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/updateAvatar",
+      "${process.env.MyTube_APP_URL}/api/v1/users/updateAvatar",
       {
         method: "PATCH",
         body: formData,
@@ -213,7 +213,7 @@ async function updateCoverImage(event) {
       return;
     }
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/updateCoverImage",
+      "${process.env.MyTube_APP_URL}/api/v1/users/updateCoverImage",
       {
         method: "PATCH",
         body: formData,
@@ -250,7 +250,7 @@ function removeCoverImage() {
     "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png";
 
   // Implement server update for cover image removal
-  fetch("http://localhost:8000/api/v1/users/remove-cover-image", {
+  fetch("${process.env.MyTube_APP_URL}/api/v1/users/remove-cover-image", {
     method: "POST",
     credentials: "include",
   })
@@ -288,7 +288,7 @@ async function logoutUser() {
       return;
     }
 
-    const response = await fetch("http://localhost:8000/api/v1/users/logout", {
+    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/logout", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -343,7 +343,7 @@ async function updateProfileDetails(event) {
     }
 
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/updateAccount",
+      "${process.env.MyTube_APP_URL}/api/v1/users/updateAccount",
       {
         method: "PATCH",
         headers: {
@@ -389,7 +389,7 @@ async function changePassword(event) {
     }
 
     const response = await fetch(
-      "http://localhost:8000/api/v1/users/changePassword",
+      "${process.env.MyTube_APP_URL}/api/v1/users/changePassword",
       {
         method: "PATCH",
         headers: {
@@ -426,7 +426,7 @@ async function fetchCounts() {
 
     const [subscribersResponse, subscribedToResponse,views] = await Promise.all([
       fetch(
-        `http://localhost:8000/api/v1/subscription/count-subscribers/${channelId}`,
+        `${process.env.MyTube_APP_URL}/api/v1/subscription/count-subscribers/${channelId}`,
         {
           method: "GET",
           headers: {
@@ -435,14 +435,14 @@ async function fetchCounts() {
           credentials: "include",
         }
       ),
-      fetch(`http://localhost:8000/api/v1/subscription/count-subscribed-to`, {
+      fetch(`${process.env.MyTube_APP_URL}/api/v1/subscription/count-subscribed-to`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         credentials: "include",
       }),
-      fetch(`http://localhost:8000/api/v1/video/views`, {
+      fetch(`${process.env.MyTube_APP_URL}/api/v1/video/views`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${accessToken}`,

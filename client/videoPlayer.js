@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Fetch video data
-    const videoResponse = await fetch(`http://localhost:8000/api/v1/video/change/${videoId}`, {
+    const videoResponse = await fetch(`${process.env.MyTube_APP_URL}/api/v1/video/change/${videoId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const video = videoData.data;
 
     // Get subscriber count
-    const subscribersResponse = await fetch(`http://localhost:8000/api/v1/subscription/count-subscribers/${video.owner._id}`, {
+    const subscribersResponse = await fetch(`${process.env.MyTube_APP_URL}/api/v1/subscription/count-subscribers/${video.owner._id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
     });
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (videoViews) videoViews.textContent = `${video.views} views`;
 
     // Fetch subscribed channels for the current user
-    const subscriptionsResponse = await fetch(`http://localhost:8000/api/v1/subscription/getSubscribedToList`, {
+    const subscriptionsResponse = await fetch(`${process.env.MyTube_APP_URL}/api/v1/subscription/getSubscribedToList`, {
       method: "GET",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
     });
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (subscribeButton) {
       subscribeButton.addEventListener("click", async () => {
         try {
-          const subscribeResponse = await fetch(`http://localhost:8000/api/v1/subscription/toggleSubscription/${video.owner._id}`, {
+          const subscribeResponse = await fetch(`${process.env.MyTube_APP_URL}/api/v1/subscription/toggleSubscription/${video.owner._id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${getCookie("accessToken")}` },
           });
@@ -135,7 +135,7 @@ async function checkTokenAndFetchUser() {
       return;
     }
 
-    const response = await fetch("http://localhost:8000/api/v1/users/current-user", {
+    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/current-user", {
       method: "GET",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
       credentials: "include",
@@ -178,7 +178,7 @@ function handleTokenError() {
 
 async function refreshToken() {
   try {
-    const response = await fetch("http://localhost:8000/api/v1/users/refreshAccessToken", {
+    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/refreshAccessToken", {
       method: "POST",
       credentials: "include",
     });
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
       deleteOption.textContent = "Delete";
       deleteOption.addEventListener("click", async () => {
         try {
-          const deleteResponse = await fetch(`http://localhost:8000/api/v1/comment/${comment._id}`, {
+          const deleteResponse = await fetch(`${process.env.MyTube_APP_URL}/api/v1/comment/${comment._id}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
           });
@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/comment/${commentId}`, {
+      const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/comment/${commentId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({ content: newContent }),
@@ -374,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       commentsContainer.innerHTML = "";
 
-      const response = await fetch(`http://localhost:8000/api/v1/comment/${videoId}`, {
+      const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/comment/${videoId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
       });
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/comment/${videoId}`, {
+      const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/comment/${videoId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({ content }),
