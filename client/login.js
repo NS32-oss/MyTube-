@@ -25,7 +25,7 @@ async function loginUser() {
 
   try {
     // Send login request
-    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/login", {
+    const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/users/login`, {
       method: "POST",
       body: new URLSearchParams(formData),
       headers: {

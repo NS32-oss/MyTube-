@@ -135,7 +135,7 @@ async function checkTokenAndFetchUser() {
       return;
     }
 
-    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/current-user", {
+    const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/users/current-user`, {
       method: "GET",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
       credentials: "include",
@@ -178,7 +178,7 @@ function handleTokenError() {
 
 async function refreshToken() {
   try {
-    const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/refreshAccessToken", {
+    const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/users/refreshAccessToken`, {
       method: "POST",
       credentials: "include",
     });

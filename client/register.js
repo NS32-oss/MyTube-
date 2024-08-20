@@ -10,7 +10,7 @@ async function registerUser() {
 
   try {
       // Send a POST request to the registration endpoint
-      const response = await fetch("${process.env.MyTube_APP_URL}/api/v1/users/register", {
+      const response = await fetch(`${process.env.MyTube_APP_URL}/api/v1/users/register`, {
           method: "POST",
           body: formData,
       });
