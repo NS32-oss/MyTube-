@@ -16,6 +16,7 @@ const uploadOnCloudinary = async (file) => {
       resource_type: 'auto',
     });
     fs.unlinkSync(file);
+    response.secure_url = response.secure_url.replace('http', 'https');
     return response;
   } catch (error) {
     fs.unlinkSync(file);

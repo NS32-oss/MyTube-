@@ -22,7 +22,7 @@ function setupEventListeners() {
   setupLikeButton("home");
   setupSubscribeButton("home");
   setupUserProfileRedirect();
-  setupCoverImageOptions();
+  // setupCoverImageOptions();
   setupDropdownMenus();
 }
 
@@ -163,6 +163,7 @@ function renderVideos(videos, section) {
     videoCard.addEventListener("click", () => window.location.href = `videoPlayer.html?id=${videoId}`);
     videoGrid.appendChild(videoCard);
   });
+  setupDropdownMenus();
 }
 
 
@@ -281,18 +282,18 @@ function setupUserProfileRedirect() {
   document.querySelector(".user-profile img").addEventListener("click", () => window.location.href = "profile.html");
 }
 
-function setupCoverImageOptions() {
-  let isOptionsVisible = false;
+// function setupCoverImageOptions() {
+//   let isOptionsVisible = false;
 
-  document.getElementById("cover-image-options-button").addEventListener("click", () => {
-    isOptionsVisible = !isOptionsVisible;
-    document.querySelector(".cover-image-options").style.display = isOptionsVisible ? "block" : "none";
-  });
+//   document.getElementById("cover-image-options-button").addEventListener("click", () => {
+//     isOptionsVisible = !isOptionsVisible;
+//     document.querySelector(".cover-image-options").style.display = isOptionsVisible ? "block" : "none";
+//   });
 
-  document.getElementById("cover-image-input").addEventListener("change", updateCoverImage);
-  document.getElementById("profile-image-input").addEventListener("change", updateProfileImage);
-  document.getElementById("remove-cover-image").addEventListener("click", removeCoverImage);
-}
+//   document.getElementById("cover-image-input").addEventListener("change", updateCoverImage);
+//   document.getElementById("profile-image-input").addEventListener("change", updateProfileImage);
+//   document.getElementById("remove-cover-image").addEventListener("click", removeCoverImage);
+// }
 
 function updateCoverImage(event) {
   const file = event.target.files[0];
@@ -317,15 +318,31 @@ function removeCoverImage() {
 }
 
 function setupDropdownMenus() {
-  const threeDotsMenus = document.querySelectorAll(".three-dots-menu");
-
-  threeDotsMenus.forEach((menu) => {
-    menu.addEventListener("click", () => {
-      const dropdown = menu.querySelector(".dropdown-menu");
-      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  document.addEventListener("click", (event) => {
+    // Close all dropdown menus if clicked outside
+    const dropdowns = document.querySelectorAll(".dropdown-menu.show");
+    
+    dropdowns.forEach((dropdown) => {
+      if (!dropdown.contains(event.target) && !event.target.closest(".three-dots-menu")) {
+        dropdown.classList.remove("show");
+      }
     });
+
+    // Toggle dropdown menu visibility
+    const menu = event.target.closest(".three-dots-menu");
+    if (menu) {
+      const dropdown = menu.querySelector(".dropdown-menu");
+      if (dropdown) {
+        dropdown.classList.toggle("show");
+        event.stopPropagation(); // Prevent click from propagating to document
+        event.preventDefault(); // Prevent default action if necessary
+      }
+    }
   });
 }
+
+
+
 
 document
   .getElementById("video-dropdown-button")

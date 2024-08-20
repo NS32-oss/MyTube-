@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Fetch initial comments when the page loads
-    fetchComments();
+    // fetchComments();
 
   } catch (error) {
     console.error("Error fetching video data:", error);
