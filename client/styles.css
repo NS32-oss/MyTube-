@@ -335,6 +335,7 @@ nav ul li a.active {
   position: absolute;
   top: -70px; 
   right: 10px;
+  padding: 10px;
   height: 70px; /* Adjust the height based on the content */
   background-color: #333;
   border-radius: 4px;
@@ -367,7 +368,7 @@ nav ul li a.active {
 }
 
 .dropdown-menu a:hover {
-  background-color: #444;
+  background-color: #ff0000;
 }
 
 /* Optional: Style to show the dropdown menu */

@@ -1,11 +1,12 @@
-let currentUserId = null; 
+let currentUserId = null;
+let currentUser = null;
 document.addEventListener("DOMContentLoaded", async () => {
   await initializePage();
   setupEventListeners();
 });
 
 async function initializePage() {
-  checkTokenAndFetchUser();
+  await checkTokenAndFetchUser();
   await loadVideos("home");
   showSection("home");
   await loadYourVideos();
@@ -17,7 +18,9 @@ function setupEventListeners() {
 
   const yourVideosButton = document.getElementById("your-videos");
   if (yourVideosButton) {
-    yourVideosButton.addEventListener("click", () => showSection("your-videos"));
+    yourVideosButton.addEventListener("click", () =>
+      showSection("your-videos")
+    );
   }
 
   setupLikeButton("home");
@@ -31,7 +34,9 @@ function setupClosePlayerListener(section) {
   const closePlayer = document.getElementById(`close-player-${section}`);
   if (closePlayer) {
     closePlayer.addEventListener("click", () => {
-      const playerContainer = document.getElementById(`video-player-container-${section}`);
+      const playerContainer = document.getElementById(
+        `video-player-container-${section}`
+      );
       const currentVideo = document.getElementById(`current-video-${section}`);
       if (playerContainer) playerContainer.style.display = "none";
       if (currentVideo) currentVideo.pause();
@@ -41,7 +46,9 @@ function setupClosePlayerListener(section) {
 
 async function loadVideos(section) {
   try {
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/video/`);
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/video/`
+    );
     const result = await response.json();
 
     if (result.status === 200) {
@@ -57,23 +64,27 @@ async function loadVideos(section) {
 async function loadYourVideos() {
   try {
     const accessToken = getCookie("accessToken");
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/video/user/videos`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/video/user/videos`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
     const result = await response.json();
     if (result.status === 200) {
       //calculate total views of all videos
       let totalViews = 0;
-      result.data.forEach((video) => totalViews += video.views);
+      result.data.forEach((video) => (totalViews += video.views));
       const totalViewsElement = document.getElementById("total-views");
       if (totalViewsElement) totalViewsElement.textContent = totalViews;
       const totalVideosElement = document.getElementById("total-videos");
-      if (totalVideosElement) totalVideosElement.textContent = result.data.length;
+      if (totalVideosElement)
+        totalVideosElement.textContent = result.data.length;
       renderVideos(result.data, null);
     } else {
       console.error("Error fetching videos:", result.message);
@@ -114,11 +125,13 @@ function timeAgo(date) {
   return `Just now`;
 }
 
-function renderVideos(videos, section, currentUser) {
+function renderVideos(videos, section) {
   // Sort videos by createdAt in descending order (newest first)
   videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  const videoGrid = document.getElementById(section === "home" ? "video-grid-home" : "video-grid-your-videos");
+  const videoGrid = document.getElementById(
+    section === "home" ? "video-grid-home" : "video-grid-your-videos"
+  );
   if (!videoGrid) return;
 
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
@@ -134,12 +147,16 @@ function renderVideos(videos, section, currentUser) {
 
     videoCard.innerHTML = `
       <div class="video-thumbnail">
-        <img src="${video.thumbnail || "https://via.placeholder.com/320x180"}" alt="${video.title}">
+        <img src="${
+          video.thumbnail || "https://via.placeholder.com/320x180"
+        }" alt="${video.title}">
         <span class="video-duration">${videoDuration}</span>
       </div>
       <div class="video-info">
         <div class="channel-icon-container">
-          <img class="channel-icon" src="${video.owner.avatar || "https://via.placeholder.com/36"}" alt="${video.channelName}">
+          <img class="channel-icon" src="${
+            video.owner.avatar || "https://via.placeholder.com/36"
+          }" alt="${video.channelName}">
         </div>
         <div class="video-details">
           <h3 class="video-title">${video.title}</h3>
@@ -152,14 +169,28 @@ function renderVideos(videos, section, currentUser) {
           <span class="dot"></span>
           <div class="dropdown-menu">
             <ul>
-              ${video.owner._id === currentUserId ? '<li><a href="#" class="delete-option">Delete</a></li>' : ''}
+              ${
+                video.owner._id === currentUserId ||
+                currentUser === 'ns32(admin)'
+                  ? '<li><a href="#" class="delete-option">Delete</a></li>'
+                  : ""
+              }
               <li><a href="#" class="report-option">Report</a></li>
             </ul>
           </div>
         </div>
       </div>
     `;
-
+    console.log(currentUser);
+    // change the css of dropdown menu if the user is the owner of the video
+    if(video.owner._id !== currentUserId &&
+      currentUser !== 'ns32(admin)')
+      {
+        //set .dropdown-menu height to 30px
+        videoCard.querySelector(".dropdown-menu").style.height = "30px";
+        // top tp -30px
+        videoCard.querySelector(".dropdown-menu").style.top = "-50px";
+      }
     // Event listener for video card clicks
     videoCard.addEventListener("click", (event) => {
       // Redirect to video player page if not clicking on the three-dots menu
@@ -169,17 +200,41 @@ function renderVideos(videos, section, currentUser) {
     });
 
     // Event listener for delete option
-    const deleteOption = videoCard.querySelector('.delete-option');
+    const deleteOption = videoCard.querySelector(".delete-option");
     if (deleteOption) {
-      deleteOption.addEventListener("click", (event) => {
+      deleteOption.addEventListener("click", async (event) => {
         event.stopPropagation();
-        // Add your delete video logic here
-        console.log(`Delete video with id: ${videoId}`);
+        // delete video logic
+        const accessToken = getCookie("accessToken");
+        try {
+          const response = await fetch(
+            `https://mytubeapp.onrender.com/api/v1/video/change/${videoId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              credentials: "include",
+            }
+          );
+
+          const result = await response.json();
+
+          if (result.status === 200) {
+            videoCard.remove();
+            alert("Video deleted successfully");
+          } else {
+            console.error("Error deleting video:", result.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       });
     }
 
     // Event listener for report option
-    const reportOption = videoCard.querySelector('.report-option');
+    const reportOption = videoCard.querySelector(".report-option");
     reportOption.addEventListener("click", (event) => {
       event.stopPropagation();
       // Add your report video logic here
@@ -190,8 +245,6 @@ function renderVideos(videos, section, currentUser) {
     videoGrid.appendChild(videoCard);
   });
 }
-
-
 
 function setupLikeButton(section) {
   const likeButton = document.getElementById(`like-btn-${section}`);
@@ -212,10 +265,14 @@ function setupSubscribeButton(section) {
 }
 
 function showSection(sectionId) {
-  document.querySelectorAll(".section").forEach((section) => section.style.display = "none");
+  document
+    .querySelectorAll(".section")
+    .forEach((section) => (section.style.display = "none"));
   document.getElementById(sectionId).style.display = "block";
 
-  document.querySelectorAll("nav ul li a").forEach((link) => link.classList.remove("active"));
+  document
+    .querySelectorAll("nav ul li a")
+    .forEach((link) => link.classList.remove("active"));
   document.getElementById(`${sectionId}-link`).classList.add("active");
 }
 
@@ -228,19 +285,23 @@ async function checkTokenAndFetchUser() {
       return;
     }
 
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/users/current-user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/current-user`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
       if (data.status === 200) {
         currentUserId = data.data._id;
+        currentUser = data.data.username;
         displayUserProfile(data.data);
       } else {
         console.error("Error fetching user data:", data.message);
@@ -260,7 +321,9 @@ async function checkTokenAndFetchUser() {
 
 function displayUserProfile(user) {
   const userProfileImg = document.querySelector(".user-profile img");
-  userProfileImg.src = user.avatar || "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
+  userProfileImg.src =
+    user.avatar ||
+    "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
 }
 
 function handleTokenError() {
@@ -269,10 +332,13 @@ function handleTokenError() {
 
 async function refreshToken() {
   try {
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/users/refreshAccessToken`, {
-      method: "POST",
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/refreshAccessToken`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -285,7 +351,11 @@ async function refreshToken() {
         handleTokenError();
       }
     } else {
-      console.error("Failed to refresh token, HTTP error:", response.status, response.statusText);
+      console.error(
+        "Failed to refresh token, HTTP error:",
+        response.status,
+        response.statusText
+      );
       handleTokenError();
     }
   } catch (error) {
@@ -306,7 +376,9 @@ function redirectToLogin() {
 }
 
 function setupUserProfileRedirect() {
-  document.querySelector(".user-profile img").addEventListener("click", () => window.location.href = "profile.html");
+  document
+    .querySelector(".user-profile img")
+    .addEventListener("click", () => (window.location.href = "profile.html"));
 }
 
 // function setupCoverImageOptions() {
@@ -326,7 +398,8 @@ function updateCoverImage(event) {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = (e) => document.getElementById("cover-image").src = e.target.result;
+    reader.onload = (e) =>
+      (document.getElementById("cover-image").src = e.target.result);
     reader.readAsDataURL(file);
   }
 }
@@ -335,13 +408,15 @@ function updateProfileImage(event) {
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
-    reader.onload = (e) => document.getElementById("profile-image").src = e.target.result;
+    reader.onload = (e) =>
+      (document.getElementById("profile-image").src = e.target.result);
     reader.readAsDataURL(file);
   }
 }
 
 function removeCoverImage() {
-  document.getElementById("cover-image").src = "https://example.com/default-cover-image.png";
+  document.getElementById("cover-image").src =
+    "https://example.com/default-cover-image.png";
 }
 
 function setupDropdownMenus() {
@@ -351,7 +426,10 @@ function setupDropdownMenus() {
     // Close all dropdown menus if clicked outside
     const dropdowns = document.querySelectorAll(".dropdown-menu");
     dropdowns.forEach((dropdown) => {
-      if (!dropdown.contains(event.target) && !event.target.closest(".three-dots-menu")) {
+      if (
+        !dropdown.contains(event.target) &&
+        !event.target.closest(".three-dots-menu")
+      ) {
         dropdown.classList.remove("show");
         if (currentlyOpenDropdown === dropdown) {
           currentlyOpenDropdown = null;
@@ -368,10 +446,10 @@ function setupDropdownMenus() {
         if (currentlyOpenDropdown && currentlyOpenDropdown !== dropdown) {
           currentlyOpenDropdown.classList.remove("show");
         }
-        
+
         dropdown.classList.toggle("show");
         currentlyOpenDropdown = dropdown;
-        
+
         event.stopPropagation(); // Prevent click from propagating to document
         event.preventDefault(); // Prevent default action if necessary
       }
@@ -381,10 +459,6 @@ function setupDropdownMenus() {
 
 // Call the function to set up the dropdown menus
 setupDropdownMenus();
-
-
-
-
 
 document
   .getElementById("video-dropdown-button")
