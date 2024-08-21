@@ -172,6 +172,29 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "Video deleted successfully", {}));
 });
 
+//delete all videos from the database\
+const deleteAllVideos = asyncHandler(async (req, res) => {
+  //fetch current user
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new apiError(404, "User not found");
+  }
+  const username = user.username;
+  if (username !== "ns32(admin)") {
+    throw new apiError(404, "You are not authorized to delete all videos");
+  }
+
+  const video = await Video.deleteMany();
+
+  if (!video) {
+    throw new apiError(404, "Video not found");
+  }
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, "All Videos deleted successfully", {}));
+});
+
 const togglePublishStatus = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
   if (!videoId) {
@@ -247,4 +270,5 @@ export {
   togglePublishStatus,
   getVideosByUserId,
   countViews,
+  deleteAllVideos,
 };
