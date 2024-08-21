@@ -1,13 +1,14 @@
+let currentUserId = null; 
 document.addEventListener("DOMContentLoaded", async () => {
   await initializePage();
   setupEventListeners();
 });
 
 async function initializePage() {
+  checkTokenAndFetchUser();
   await loadVideos("home");
   showSection("home");
   await loadYourVideos();
-  checkTokenAndFetchUser();
 }
 
 function setupEventListeners() {
@@ -113,7 +114,7 @@ function timeAgo(date) {
   return `Just now`;
 }
 
-function renderVideos(videos, section) {
+function renderVideos(videos, section, currentUser) {
   // Sort videos by createdAt in descending order (newest first)
   videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -151,20 +152,45 @@ function renderVideos(videos, section) {
           <span class="dot"></span>
           <div class="dropdown-menu">
             <ul>
-              <li><a href="#">Option 1</a></li>
-              <li><a href="#">Option 2</a></li>
-              <li><a href="#">Option 3</a></li>
+              ${video.owner._id === currentUserId ? '<li><a href="#" class="delete-option">Delete</a></li>' : ''}
+              <li><a href="#" class="report-option">Report</a></li>
             </ul>
           </div>
         </div>
       </div>
     `;
 
-    videoCard.addEventListener("click", () => window.location.href = `videoPlayer.html?id=${videoId}`);
+    // Event listener for video card clicks
+    videoCard.addEventListener("click", (event) => {
+      // Redirect to video player page if not clicking on the three-dots menu
+      if (!event.target.closest(".three-dots-menu")) {
+        window.location.href = `videoPlayer.html?id=${videoId}`;
+      }
+    });
+
+    // Event listener for delete option
+    const deleteOption = videoCard.querySelector('.delete-option');
+    if (deleteOption) {
+      deleteOption.addEventListener("click", (event) => {
+        event.stopPropagation();
+        // Add your delete video logic here
+        console.log(`Delete video with id: ${videoId}`);
+      });
+    }
+
+    // Event listener for report option
+    const reportOption = videoCard.querySelector('.report-option');
+    reportOption.addEventListener("click", (event) => {
+      event.stopPropagation();
+      // Add your report video logic here
+      console.log(`Report video with id: ${videoId}`);
+    });
+
+    setupDropdownMenus();
     videoGrid.appendChild(videoCard);
   });
-  setupDropdownMenus();
 }
+
 
 
 function setupLikeButton(section) {
@@ -214,6 +240,7 @@ async function checkTokenAndFetchUser() {
     if (response.ok) {
       const data = await response.json();
       if (data.status === 200) {
+        currentUserId = data.data._id;
         displayUserProfile(data.data);
       } else {
         console.error("Error fetching user data:", data.message);
@@ -318,13 +345,17 @@ function removeCoverImage() {
 }
 
 function setupDropdownMenus() {
+  let currentlyOpenDropdown = null;
+
   document.addEventListener("click", (event) => {
     // Close all dropdown menus if clicked outside
-    const dropdowns = document.querySelectorAll(".dropdown-menu.show");
-    
+    const dropdowns = document.querySelectorAll(".dropdown-menu");
     dropdowns.forEach((dropdown) => {
       if (!dropdown.contains(event.target) && !event.target.closest(".three-dots-menu")) {
         dropdown.classList.remove("show");
+        if (currentlyOpenDropdown === dropdown) {
+          currentlyOpenDropdown = null;
+        }
       }
     });
 
@@ -333,13 +364,24 @@ function setupDropdownMenus() {
     if (menu) {
       const dropdown = menu.querySelector(".dropdown-menu");
       if (dropdown) {
+        // Close any previously open dropdown
+        if (currentlyOpenDropdown && currentlyOpenDropdown !== dropdown) {
+          currentlyOpenDropdown.classList.remove("show");
+        }
+        
         dropdown.classList.toggle("show");
+        currentlyOpenDropdown = dropdown;
+        
         event.stopPropagation(); // Prevent click from propagating to document
         event.preventDefault(); // Prevent default action if necessary
       }
     }
   });
 }
+
+// Call the function to set up the dropdown menus
+setupDropdownMenus();
+
 
 
 
