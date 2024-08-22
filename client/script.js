@@ -419,7 +419,8 @@ function removeCoverImage() {
     "https://example.com/default-cover-image.png";
 }
 
-function setupDropdownMenus() {
+function setupDropdownMenus(string) {
+  
   let currentlyOpenDropdown = null;
 
   document.addEventListener("click", (event) => {
@@ -446,7 +447,10 @@ function setupDropdownMenus() {
         if (currentlyOpenDropdown && currentlyOpenDropdown !== dropdown) {
           currentlyOpenDropdown.classList.remove("show");
         }
-
+        if(string)
+          {
+            console.log(string);
+          }
         dropdown.classList.toggle("show");
         currentlyOpenDropdown = dropdown;
 
@@ -458,7 +462,7 @@ function setupDropdownMenus() {
 }
 
 // Call the function to set up the dropdown menus
-setupDropdownMenus();
+setupDropdownMenus("k");
 
 document
   .getElementById("video-dropdown-button")
