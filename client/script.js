@@ -3,6 +3,7 @@ let currentUser = null;
 document.addEventListener("DOMContentLoaded", async () => {
   await initializePage();
   setupEventListeners();
+  setupDropdownMenus();
 });
 
 async function initializePage() {
@@ -419,50 +420,46 @@ function removeCoverImage() {
     "https://example.com/default-cover-image.png";
 }
 
-function setupDropdownMenus(string) {
-  
+function setupDropdownMenus() {
   let currentlyOpenDropdown = null;
 
   document.addEventListener("click", (event) => {
-    // Close all dropdown menus if clicked outside
-    const dropdowns = document.querySelectorAll(".dropdown-menu");
-    dropdowns.forEach((dropdown) => {
-      if (
-        !dropdown.contains(event.target) &&
-        !event.target.closest(".three-dots-menu")
-      ) {
-        dropdown.classList.remove("show");
-        if (currentlyOpenDropdown === dropdown) {
-          currentlyOpenDropdown = null;
-        }
-      }
-    });
-
-    // Toggle dropdown menu visibility
+    // Check if the clicked element is within a menu or dropdown
     const menu = event.target.closest(".three-dots-menu");
+
     if (menu) {
+      // Prevent click from propagating to document
+      event.stopPropagation(); 
+      // Prevent default action if necessary
+      event.preventDefault();
+
       const dropdown = menu.querySelector(".dropdown-menu");
+
       if (dropdown) {
-        // Close any previously open dropdown
+        // Close any previously open dropdown if it is not the same as the current one
         if (currentlyOpenDropdown && currentlyOpenDropdown !== dropdown) {
           currentlyOpenDropdown.classList.remove("show");
         }
-        if(string)
-          {
-            console.log(string);
-          }
-        dropdown.classList.toggle("show");
-        currentlyOpenDropdown = dropdown;
 
-        event.stopPropagation(); // Prevent click from propagating to document
-        event.preventDefault(); // Prevent default action if necessary
+        // Toggle the visibility of the current dropdown
+        dropdown.classList.toggle("show");
+        currentlyOpenDropdown = dropdown.classList.contains("show") ? dropdown : null;
       }
+    } else {
+      // Clicked outside of any dropdown menu, so close all
+      const dropdowns = document.querySelectorAll(".dropdown-menu");
+      dropdowns.forEach((dropdown) => {
+        dropdown.classList.remove("show");
+      });
+
+      currentlyOpenDropdown = null;
     }
   });
 }
 
+
 // Call the function to set up the dropdown menus
-setupDropdownMenus("k");
+setupDropdownMenus();
 
 document
   .getElementById("video-dropdown-button")
