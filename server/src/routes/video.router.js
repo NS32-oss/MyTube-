@@ -29,7 +29,7 @@ console.log("video.router.js");
 
 router
   .route("/change/:videoId")
-  .get(getVideoById) // This expects a videoId as a parameter
+  .get(verifyJWT,getVideoById) // This expects a videoId as a parameter
   .patch(verifyJWT, upload.single("thumbnail"), updateVideo)
   .delete(verifyJWT, deleteVideo);
 
