@@ -238,12 +238,11 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 });
 
 const updateUserCoverImage = asyncHandler(async (req, res) => {
-  console.log("Update Cover Image");
   const coverImageLocalPath = req.file?.path;
   if (!coverImageLocalPath) {
     return res
       .status(400)
-      .json(new apiResponse(402, "Image not there", {}));
+      .json(new apiResponse(402, "Cover Image not there", {}));
   }
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
   if (!coverImage.url) {

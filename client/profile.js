@@ -246,7 +246,7 @@ async function removeCoverImage() {
       return;
     }
 
-    const response = await fetch('https://mytubeapp.onrender.com/api/v1/users/updateCoverImage', {
+    const response = await fetch('https://mytubeapp.onrender.com/api/v1/users/removeCoverImage', {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${accessToken}`
