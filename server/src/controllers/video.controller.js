@@ -104,6 +104,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
+
   if (!videoId) {
     throw new apiError(400, "Video ID required");
   }
@@ -116,16 +117,23 @@ const getVideoById = asyncHandler(async (req, res) => {
   if (!getVideo) {
     throw new apiError(404, "Video not found");
   }
-  //add video id to watch history of user and keep only unique values and also keep the latest video at the top
+
+  // Add video ID to watch history of user and keep only unique values
   const user = await User.findById(req.user._id);
   if (!user) {
     throw new apiError(404, "User not found");
   }
-  user.watchHistory = user.watchHistory.filter((video) => video.videoId !== videoId);
-  user.watchHistory.unshift({ videoId });
+
+  // Filter out the existing videoId from watchHistory
+  user.watchHistory = user.watchHistory.filter((video) => !video.equals(videoId));
+  
+  // Add the new videoId to the front of the watch history
+  user.watchHistory.unshift(videoId); // Directly push the ObjectId
+
   await user.save();
   console.log("watch history", user.watchHistory);
 
+  // Increment view count
   getVideo.views += 1;
   await getVideo.save();
 
@@ -133,6 +141,7 @@ const getVideoById = asyncHandler(async (req, res) => {
     .status(200)
     .json(new apiResponse(200, "Video fetched successfully", getVideo));
 });
+
 
 const updateVideo = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
