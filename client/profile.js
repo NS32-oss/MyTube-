@@ -78,9 +78,7 @@ async function fetchCurrentUser() {
       const data = await response.json();
       if (data.status === 200) {
         const user = data.data;
-        console.log("User data:", user);
         userID = user._id;
-        console.log("User ID: ", userID);
         displayUserProfile(user);
         displayUserCoverImage(user);
       } else {
@@ -122,7 +120,6 @@ function displayUserCoverImage(user) {
   if (user.coverImage) {
     userCoverImg.src = user.coverImage;
   } else {
-    console.log("No cover image found");
     userCoverImg.src =
       "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png";
   }
@@ -259,6 +256,7 @@ async function removeCoverImage() {
     
     console.log(response);
     const data = await response.json();
+    console.log(data);
     if (response.ok && data.status === 200) {
       console.log("Cover image removed successfully");
       const userCoverImg = document.querySelector("#cover-image");
