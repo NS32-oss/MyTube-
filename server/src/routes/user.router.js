@@ -48,5 +48,5 @@ router
 
 router.route("/history").get(verifyJWT, getWatchHistory);
 
-router.route("/removeCoverImage").delete(verifyJWT, removeCoverImage);
+router.route("/removeCoverImage").patch(verifyJWT, removeCoverImage);
 export default router;

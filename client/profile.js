@@ -252,7 +252,7 @@ async function removeCoverImage() {
     const response = await fetch(
       `https://mytubeapp.onrender.com/api/v1/users/updateCoverImage`,
       {
-        method: "DELETE",
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`, // Optionally include the token for verification
         },
