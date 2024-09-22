@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Get the video ID from the URL
   const videoId = urlParams.get("id");
+  console.log("Video ID:", videoId);
 
   try {
     // Fetch video data
@@ -14,11 +15,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       `https://mytubeapp.onrender.com/api/v1/video/change/${videoId}`,
       {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${getCookie("accessToken")}`,
+        },
       }
     );
-
-    if (!videoResponse.ok) throw new Error("Failed to fetch video data");
+    console.log(videoResponse);
+    if (!videoResponse.ok) {
+      const errorText = await videoResponse.text(); // Read the error message
+      console.error("Error response:", errorText);
+      throw new Error("Failed to fetch video data");
+    }
 
     const videoData = await videoResponse.json();
     const video = videoData.data;

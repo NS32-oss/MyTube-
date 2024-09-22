@@ -105,8 +105,16 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
 
+  if (!videoId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Video ID is required" });
+  }
+
   if (!mongoose.Types.ObjectId.isValid(videoId)) {
-    throw new apiError(400, "Invalid video ID");
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid video ID" });
   }
 
   const getVideo = await Video.findById(videoId).populate(
@@ -114,21 +122,16 @@ const getVideoById = asyncHandler(async (req, res) => {
     "username avatar"
   );
 
-  if (!getVideo || !getVideo.isPublished) {
-    throw new apiError(404, "Video not available");
-  }
-  const user = await User.findById(req.user._id);
-  if (!user) {
-    throw new apiError(404, "User not found");
+  if (!getVideo) {
+    return res.status(404).json({ success: false, message: "Video not found" });
   }
 
-  user.watchHistory = user.watchHistory.filter(id => !id.equals(videoId));
+  if (!getVideo.isPublished) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Video not available" });
+  }
 
-  // Add the new video ID to the front of the watch history
-  user.watchHistory.unshift(videoId);
-  console.log("watch history", user.watchHistory);
-  console.log(user.watchHistory);
-  await user.save();
   getVideo.views += 1;
   await getVideo.save();
 
