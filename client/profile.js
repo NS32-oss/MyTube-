@@ -206,7 +206,6 @@ async function updateCoverImage(event) {
     formData.append("coverImage", file);
 
     const accessToken = Cookies.get("accessToken");
-    console.log("Access Token: ", accessToken);
     if (!accessToken) {
       console.error("User is not authenticated");
       alert("Error: User is not authenticated. Please log in.");
@@ -240,30 +239,46 @@ async function updateCoverImage(event) {
   }
 }
 
-// Event listener for file input change
-// document.getElementById("cover-image-input").addEventListener("change", updateCoverImage);
 
 // Function to remove cover image
-function removeCoverImage() {
-  const coverImage = document.getElementById("cover-image");
-  coverImage.src =
-    "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png";
+async function removeCoverImage() {
+  try {
+    const accessToken = Cookies.get("accessToken");
+    if (!accessToken) {
+      console.error("User is not authenticated");
+      return;
+    }
 
-  // Implement server update for cover image removal
-  fetch("https://mytubeapp.onrender.com/api/v1/users/remove-cover-image", {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === 200) {
-        console.log("Cover image removed successfully");
-      } else {
-        console.error("Failed to remove cover image:", data.message);
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/updateCoverImage`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Optionally include the token for verification
+        },
       }
-    })
-    .catch((error) => console.error("Error removing cover image:", error));
+    );
+
+    const data = await response.json();
+    if (response.ok && data.status === 200) {
+      console.log("Cover image removed successfully");
+      const userCoverImg = document.querySelector("#cover-image");
+      userCoverImg.src =
+      "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png" ;
+      //reload after 1 second
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      console.error("Failed to remove cover image:", data.message);
+      alert("Error: " + (data.message || "Failed to remove cover image"));
+    }
+  } catch (error) {
+    console.error("Error removing cover image:", error);
+  }
 }
+
+
 
 // Function to toggle cover image options
 function toggleCoverImageOptions() {

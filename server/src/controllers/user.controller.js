@@ -406,6 +406,23 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   );
 });
 
+//remove cover image
+
+const removeCoverImage = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        coverImage: "",
+      },
+    },
+    { new: true }
+  );
+  return res
+    .status(200)
+    .json(new apiResponse(200, "Cover Image removed successfully", user));
+});
+
 export {
   registerUser,
   loginUser,
@@ -418,4 +435,6 @@ export {
   getUserChannelProfile,
   getWatchHistory,
   refreshAccessToken,
+  removeCoverImage,
+  
 };
