@@ -249,16 +249,15 @@ async function removeCoverImage() {
       return;
     }
 
-    const response = await fetch(
-      `https://mytubeapp.onrender.com/api/v1/users/updateCoverImage`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${accessToken}`, // Optionally include the token for verification
-        },
-      }
-    );
-
+    const response = await fetch('https://mytubeapp.onrender.com/api/v1/users/updateCoverImage', {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+      credentials: 'include' // Include cookies for session
+    });
+    
+    console.log(response);
     const data = await response.json();
     if (response.ok && data.status === 200) {
       console.log("Cover image removed successfully");

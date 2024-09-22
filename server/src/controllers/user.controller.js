@@ -265,6 +265,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 });
 
 const getUserChannelProfile = asyncHandler(async (req, res) => {
+  console.log("Get User Channel Profile");
   const { username } = req.params;
   console.log(username);
   if (!username) {
@@ -409,6 +410,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 //remove cover image
 
 const removeCoverImage = asyncHandler(async (req, res) => {
+  console.log("Remove Cover Image");
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -435,6 +437,5 @@ export {
   getUserChannelProfile,
   getWatchHistory,
   refreshAccessToken,
-  removeCoverImage,
-  
+  removeCoverImage,  
 };
