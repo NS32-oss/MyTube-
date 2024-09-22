@@ -3,6 +3,7 @@ import apiError from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import apiResponse from "../utils/apiResponse.js";
+import mongoose from "mongoose";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -338,6 +339,8 @@ const getWatchHistory = asyncHandler(async (req, res) => {
       $match: {
         _id: new mongoose.Types.ObjectId(req.user._id),
       },
+    },
+    {
       $lookup: {
         from: "videos",
         localField: "watchHistory",
@@ -350,7 +353,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
               localField: "owner",
               foreignField: "_id",
               as: "owner",
-              pipelines: [
+              pipeline: [ // Corrected from "pipelines" to "pipeline"
                 {
                   $project: {
                     fullName: 1,
@@ -377,6 +380,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     .status(200)
     .json(new apiResponse(200, "Watch History fetched", user[0].watchHistory));
 });
+
 //refresh access token
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const { refreshToken } = req.cookies;

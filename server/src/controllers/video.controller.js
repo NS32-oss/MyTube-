@@ -109,21 +109,31 @@ const getVideoById = asyncHandler(async (req, res) => {
     throw new apiError(400, "Invalid video ID");
   }
 
-  const getVideo = await Video.findById(videoId).populate(
-    "owner",
-    "username avatar"
-  );
-
-  if (!getVideo || !getVideo.isPublished) {
+  const video = await Video.findById(videoId).populate("owner", "username avatar");
+  if (!video || !video.isPublished) {
     throw new apiError(404, "Video not available");
   }
-  getVideo.views += 1;
-  await getVideo.save();
 
-  return res
-    .status(200)
-    .json(new apiResponse(200, "Video fetched successfully", getVideo));
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new apiError(404, "User not found");
+  }
+
+  user.watchHistory = user.watchHistory.filter(id => !id.equals(videoId));
+
+  user.watchHistory.unshift(videoId);
+
+  console.log(video.views);
+  console.log("Jai Shree Ram");
+
+  console.log(user.watchHistory);
+  video.views += 1;
+
+  await Promise.all([user.save(), video.save()]);
+
+  return res.status(200).json(new apiResponse(200, "Video fetched successfully", video));
 });
+
 
 const updateVideo = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
