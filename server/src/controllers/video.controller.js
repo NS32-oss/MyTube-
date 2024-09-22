@@ -117,19 +117,6 @@ const getVideoById = asyncHandler(async (req, res) => {
   if (!getVideo || !getVideo.isPublished) {
     throw new apiError(404, "Video not available");
   }
-  //save the video id in watch hisotry of user and all unique and the latest videos watched should come at first
-  // const user = await User.findById(req.user._id);
-  // if (!user) {
-  //   throw new apiError(404, "User not found");
-  // }
-  // const watchHistory = user.watchHistory;
-  // const index = watchHistory.indexOf(videoId);
-  // if (index !== -1) {
-  //   watchHistory.splice(index, 1);
-  // }
-  // watchHistory.unshift(videoId);
-  // user.watchHistory = watchHistory;
-
   getVideo.views += 1;
   await getVideo.save();
 
