@@ -36,8 +36,8 @@
         <nav>
             <ul>
                 <li><a href="#" id="home-link" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#" id="your-tweets-link" onclick="showSection('your-tweets')"><i class="fas fa-edit"></i>
-                        Your Tweets</a></li>
+                <li><a href="#" id="search-link" onclick="showSection('search')"><i class="fa fa-search"></i>
+                        Search</a></li>
                 <li><a href="#" id="history-link" onclick="showSection('history')"><i class="fas fa-history"></i>
                         History</a></li>
                 <li><a href="#" id="playlists-link" onclick="showSection('playlists')"><i class="fas fa-list"></i>
@@ -46,14 +46,10 @@
                         Your Videos</a></li>
                 <li><a href="#" id="watch-later-link" onclick="showSection('watch-later')"><i class="fas fa-clock"></i>
                         Watch Later</a></li>
-                <li><a href="#" id="liked-videos-link" onclick="showSection('liked-videos')"><i
-                            class="fas fa-thumbs-up"></i> Liked Videos</a></li>
             </ul>
         </nav>
 
         <main class="main-n">
-
-
 
             <section id="home" class="section">
                 <div id="video-grid-home" class="video-grid"></div>
@@ -83,28 +79,21 @@
 
                     <button id="close-player">Close Player</button>
                 </div>
-
             </section>
 
-
-
-            <section id="your-tweets" class="section" style="display: none;">
-                <h2>Your Tweets</h2>
-                <p>Content for Your Tweets section.</p>
+            <section id="search" class="section" style="display: none;">
+                <h2>Your Search</h2>
+                <p>Content for Your Search section.</p>
             </section>
 
             <section id="history" class="section" style="display: none;">
                 <div id="video-grid-history" class="video-grid"></div>
-
-                
             </section>
 
             <section id="playlists" class="section" style="display: none;">
                 <h2>Playlists</h2>
                 <p>Content for Playlists section.</p>
             </section>
-
-
 
             <section id="your-videos" class="section" style="display: none;">
                 <div class="videos-summary">
@@ -118,32 +107,14 @@
                     </div>
                 </div>
                 <hr>
-
                 <div id="video-grid-your-videos" class="video-grid"></div>
-
-                <!-- <div id="video-player-container-your-videos" class="video-player-container">
-                    <video id="current-video-your-videos" controls>
-                        <source src="" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <h3 id="video-title-your-videos"></h3>
-                    <p id="video-description-your-videos"></p>
-                    <button id="close-player">Close Player</button>
-                </div> -->
             </section>
-
-
-
-
 
             <section id="watch-later" class="section" style="display: none;">
                 <h2>Watch Later</h2>
                 <p>Content for Watch Later section.</p>
             </section>
-            <section id="liked-videos" class="section" style="display: none;">
-                <h2>Liked Videos</h2>
-                <p>Content for Liked Videos section.</p>
-            </section>
+
         </main>
     </div>
     <script src="login.js"></script>

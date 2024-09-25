@@ -52,7 +52,6 @@ async function loadVideos(section) {
       `https://mytubeapp.onrender.com/api/v1/video/`
     );
     const result = await response.json();
-    console.log(result.data.allVideos);
     if (result.status === 200) {
       renderVideos(result.data.allVideos, section);
     } else {
@@ -79,7 +78,6 @@ async function loadWatchHistory() {
       }
     );
     const result = await response.json();
-    console.log(result.data);
     if (result.status === 200) {
       renderVideos(result.data, "history");
     } else {
@@ -168,7 +166,6 @@ function renderVideos(videos, section) {
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
 
   videos.forEach((video) => {
-    console.log(video);
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
 
