@@ -355,7 +355,7 @@ async function updateProfileDetails(event) {
     }
 
     const response = await fetch(
-      `${process.env.MyTube_APP_URL}/api/v1/users/updateAccount`,
+      `https://mytubeapp.onrender.com/api/v1/users/updateAccount`,     
       {
         method: "PATCH",
         headers: {

@@ -1,150 +1,154 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MyTube</title>
-        <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTube</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
 
-    <body>
-        <header>
-            <div class="logo">
-                <img src="https://i.ibb.co/YhrbDJ6/image-removebg.png" alt="MyTube Logo" >
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://i.ibb.co/YhrbDJ6/image-removebg.png" alt="MyTube Logo">
 
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <div class="user-actions">
-                <button id="video-dropdown-button"><i class="fas fa-video"></i></button>
-                <div id="video-dropdown-menu" class="dropdown-menu-l">
-                    <button onclick="window.location.href='upload.html'">Upload Video</button>
-                    <button onclick="createPost()">Create Post</button>
-                </div>
-                <button><i class="fas fa-bell"></i></button>
-                <div class="user-profile">
-                    <img src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
-                        alt="User Profile">
-                </div>
-            </div>
-        </header>
-        <div class="content-wrapper">
-            <nav>
-                <ul>
-                    <li><a href="#" id="home-link" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#" id="your-tweets-link" onclick="showSection('your-tweets')"><i class="fas fa-edit"></i>
-                            Your Tweets</a></li>
-                    <li><a href="#" id="history-link" onclick="showSection('history')"><i class="fas fa-history"></i>
-                            History</a></li>
-                    <li><a href="#" id="playlists-link" onclick="showSection('playlists')"><i class="fas fa-list"></i>
-                            Playlists</a></li>
-                    <li><a href="#" id="your-videos-link" onclick="showSection('your-videos')"><i class="fas fa-video"></i>
-                            Your Videos</a></li>
-                    <li><a href="#" id="watch-later-link" onclick="showSection('watch-later')"><i class="fas fa-clock"></i>
-                            Watch Later</a></li>
-                    <li><a href="#" id="liked-videos-link" onclick="showSection('liked-videos')"><i
-                                class="fas fa-thumbs-up"></i> Liked Videos</a></li>
-                </ul>
-            </nav>
-
-            <main class="main-n">
-
-
-
-                <section id="home" class="section">
-                    <div id="video-grid-home" class="video-grid"></div>
-
-                    <div id="video-player-container-home" class="video-player-container">
-                        <video id="current-video-home" controls>
-                            <source src="" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <h3 id="video-title-home"></h3>
-                        <p id="video-description-home"></p>
-
-                        <!-- New Elements Added -->
-                        <p id="video-views-home"></p>
-                        <div id="video-owner-info-home">
-                            <button id="owner-profile-btn-home">
-                                <img id="owner-avatar-home" src="" alt="Owner Profile">
-                                <span id="owner-username-home"></span>
-                            </button>
-                            <span id="owner-subscribers-home"></span>
-                            <button id="subscribe-btn-home">Subscribe</button>
-                        </div>
-                        <button id="like-btn-home">
-                            <i class="fas fa-thumbs-up"></i> Like
-                        </button>
-                        <!-- End of New Elements -->
-
-                        <button id="close-player">Close Player</button>
-                    </div>
-
-                </section>
-
-
-
-                <section id="your-tweets" class="section" style="display: none;">
-                    <h2>Your Tweets</h2>
-                    <p>Content for Your Tweets section.</p>
-                </section>
-                <section id="history" class="section" style="display: none;">
-                    <h2>History</h2>
-                    <p>Content for History section.</p>
-                </section>
-                <section id="playlists" class="section" style="display: none;">
-                    <h2>Playlists</h2>
-                    <p>Content for Playlists section.</p>
-                </section>
-
-
-
-                <section id="your-videos" class="section" style="display: none;">
-                    <div class="videos-summary">
-                        <div class="summary-item">
-                            <h3>Total Videos</h3>
-                            <p class="summary-count" id="total-videos">123</p>
-                        </div>
-                        <div class="summary-item">
-                            <h3>Total Views</h3>
-                            <p class="summary-count" id="total-views">4567</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="video-grid-your-videos" class="video-grid"></div>
-
-                    <div id="video-player-container-your-videos" class="video-player-container">
-                        <video id="current-video-your-videos" controls>
-                            <source src="" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <h3 id="video-title-your-videos"></h3>
-                        <p id="video-description-your-videos"></p>
-                        <button id="close-player">Close Player</button>
-                    </div>
-                </section>
-
-
-
-
-
-                <section id="watch-later" class="section" style="display: none;">
-                    <h2>Watch Later</h2>
-                    <p>Content for Watch Later section.</p>
-                </section>
-                <section id="liked-videos" class="section" style="display: none;">
-                    <h2>Liked Videos</h2>
-                    <p>Content for Liked Videos section.</p>
-                </section>
-            </main>
         </div>
-        <script src="login.js"></script>
-        <script src="script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-    </body>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-actions">
+            <button id="video-dropdown-button"><i class="fas fa-video"></i></button>
+            <div id="video-dropdown-menu" class="dropdown-menu-l">
+                <button onclick="window.location.href='upload.html'">Upload Video</button>
+                <button onclick="createPost()">Create Post</button>
+            </div>
+            <button><i class="fas fa-bell"></i></button>
+            <div class="user-profile">
+                <img src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+                    alt="User Profile">
+            </div>
+        </div>
+    </header>
+    <div class="content-wrapper">
+        <nav>
+            <ul>
+                <li><a href="#" id="home-link" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="your-tweets-link" onclick="showSection('your-tweets')"><i class="fas fa-edit"></i>
+                        Your Tweets</a></li>
+                <li><a href="#" id="history-link" onclick="showSection('history')"><i class="fas fa-history"></i>
+                        History</a></li>
+                <li><a href="#" id="playlists-link" onclick="showSection('playlists')"><i class="fas fa-list"></i>
+                        Playlists</a></li>
+                <li><a href="#" id="your-videos-link" onclick="showSection('your-videos')"><i class="fas fa-video"></i>
+                        Your Videos</a></li>
+                <li><a href="#" id="watch-later-link" onclick="showSection('watch-later')"><i class="fas fa-clock"></i>
+                        Watch Later</a></li>
+                <li><a href="#" id="liked-videos-link" onclick="showSection('liked-videos')"><i
+                            class="fas fa-thumbs-up"></i> Liked Videos</a></li>
+            </ul>
+        </nav>
 
-    </html>
+        <main class="main-n">
+
+
+
+            <section id="home" class="section">
+                <div id="video-grid-home" class="video-grid"></div>
+
+                <div id="video-player-container-home" class="video-player-container">
+                    <video id="current-video-home" controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3 id="video-title-home"></h3>
+                    <p id="video-description-home"></p>
+
+                    <!-- New Elements Added -->
+                    <p id="video-views-home"></p>
+                    <div id="video-owner-info-home">
+                        <button id="owner-profile-btn-home">
+                            <img id="owner-avatar-home" src="" alt="Owner Profile">
+                            <span id="owner-username-home"></span>
+                        </button>
+                        <span id="owner-subscribers-home"></span>
+                        <button id="subscribe-btn-home">Subscribe</button>
+                    </div>
+                    <button id="like-btn-home">
+                        <i class="fas fa-thumbs-up"></i> Like
+                    </button>
+                    <!-- End of New Elements -->
+
+                    <button id="close-player">Close Player</button>
+                </div>
+
+            </section>
+
+
+
+            <section id="your-tweets" class="section" style="display: none;">
+                <h2>Your Tweets</h2>
+                <p>Content for Your Tweets section.</p>
+            </section>
+
+            <section id="history" class="section" style="display: none;">
+                <div id="video-grid-history" class="video-grid"></div>
+
+                
+            </section>
+
+            <section id="playlists" class="section" style="display: none;">
+                <h2>Playlists</h2>
+                <p>Content for Playlists section.</p>
+            </section>
+
+
+
+            <section id="your-videos" class="section" style="display: none;">
+                <div class="videos-summary">
+                    <div class="summary-item">
+                        <h3>Total Videos</h3>
+                        <p class="summary-count" id="total-videos">123</p>
+                    </div>
+                    <div class="summary-item">
+                        <h3>Total Views</h3>
+                        <p class="summary-count" id="total-views">4567</p>
+                    </div>
+                </div>
+                <hr>
+
+                <div id="video-grid-your-videos" class="video-grid"></div>
+
+                <!-- <div id="video-player-container-your-videos" class="video-player-container">
+                    <video id="current-video-your-videos" controls>
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h3 id="video-title-your-videos"></h3>
+                    <p id="video-description-your-videos"></p>
+                    <button id="close-player">Close Player</button>
+                </div> -->
+            </section>
+
+
+
+
+
+            <section id="watch-later" class="section" style="display: none;">
+                <h2>Watch Later</h2>
+                <p>Content for Watch Later section.</p>
+            </section>
+            <section id="liked-videos" class="section" style="display: none;">
+                <h2>Liked Videos</h2>
+                <p>Content for Liked Videos section.</p>
+            </section>
+        </main>
+    </div>
+    <script src="login.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</body>
+
+</html>

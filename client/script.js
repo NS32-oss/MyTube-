@@ -11,6 +11,7 @@ async function initializePage() {
   await loadVideos("home");
   showSection("home");
   await loadYourVideos();
+  await loadWatchHistory();
 }
 
 function setupEventListeners() {
@@ -51,7 +52,7 @@ async function loadVideos(section) {
       `https://mytubeapp.onrender.com/api/v1/video/`
     );
     const result = await response.json();
-
+    console.log(result.data.allVideos);
     if (result.status === 200) {
       renderVideos(result.data.allVideos, section);
     } else {
@@ -62,6 +63,32 @@ async function loadVideos(section) {
   }
 }
 
+//load watch history
+async function loadWatchHistory() {
+  try {
+    const accessToken = getCookie("accessToken");
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/history`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
+    const result = await response.json();
+    console.log(result.data);
+    if (result.status === 200) {
+      renderVideos(result.data, "history");
+    } else {
+      console.error("Error fetching videos:", result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 async function loadYourVideos() {
   try {
     const accessToken = getCookie("accessToken");
@@ -128,16 +155,20 @@ function timeAgo(date) {
 
 function renderVideos(videos, section) {
   // Sort videos by createdAt in descending order (newest first)
-  videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-  const videoGrid = document.getElementById(
+  if (section != "history")
+    videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  
+  let videoGrid = document.getElementById(
     section === "home" ? "video-grid-home" : "video-grid-your-videos"
   );
+  if (section === "history")
+    videoGrid = document.getElementById("video-grid-history");
   if (!videoGrid) return;
 
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
 
   videos.forEach((video) => {
+    console.log(video);
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
 
@@ -172,7 +203,7 @@ function renderVideos(videos, section) {
             <ul>
               ${
                 video.owner._id === currentUserId ||
-                currentUser === 'ns32(admin)'
+                currentUser === "ns32(admin)"
                   ? '<li><a href="#" class="delete-option">Delete</a></li>'
                   : ""
               }
@@ -182,16 +213,13 @@ function renderVideos(videos, section) {
         </div>
       </div>
     `;
-    console.log(currentUser);
     // change the css of dropdown menu if the user is the owner of the video
-    if(video.owner._id !== currentUserId &&
-      currentUser !== 'ns32(admin)')
-      {
-        //set .dropdown-menu height to 30px
-        videoCard.querySelector(".dropdown-menu").style.height = "30px";
-        // top tp -30px
-        videoCard.querySelector(".dropdown-menu").style.top = "-50px";
-      }
+    if (video.owner._id !== currentUserId && currentUser !== "ns32(admin)") {
+      //set .dropdown-menu height to 30px
+      videoCard.querySelector(".dropdown-menu").style.height = "30px";
+      // top tp -30px
+      videoCard.querySelector(".dropdown-menu").style.top = "-50px";
+    }
     // Event listener for video card clicks
     videoCard.addEventListener("click", (event) => {
       // Redirect to video player page if not clicking on the three-dots menu
@@ -429,7 +457,7 @@ function setupDropdownMenus() {
 
     if (menu) {
       // Prevent click from propagating to document
-      event.stopPropagation(); 
+      event.stopPropagation();
       // Prevent default action if necessary
       event.preventDefault();
 
@@ -443,7 +471,9 @@ function setupDropdownMenus() {
 
         // Toggle the visibility of the current dropdown
         dropdown.classList.toggle("show");
-        currentlyOpenDropdown = dropdown.classList.contains("show") ? dropdown : null;
+        currentlyOpenDropdown = dropdown.classList.contains("show")
+          ? dropdown
+          : null;
       }
     } else {
       // Clicked outside of any dropdown menu, so close all
@@ -456,7 +486,6 @@ function setupDropdownMenus() {
     }
   });
 }
-
 
 // Call the function to set up the dropdown menus
 setupDropdownMenus();

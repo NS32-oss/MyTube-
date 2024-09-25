@@ -124,16 +124,16 @@ const getVideoById = asyncHandler(async (req, res) => {
     throw new apiError(404, "User not found");
   }
 
+  // console.log("watch history 1", user.watchHistory);
   // Filter out the existing videoId from watchHistory
   user.watchHistory = user.watchHistory.filter((video) => !video.equals(videoId));
   
   // Add the new videoId to the front of the watch history
   user.watchHistory.unshift(videoId); // Directly push the ObjectId
-
+  // console.log("watch history 2", user.watchHistory);
   await user.save();
-  console.log("watch history", user.watchHistory);
 
-  // Increment view count
+  // Increment view count 
   getVideo.views += 1;
   await getVideo.save();
 

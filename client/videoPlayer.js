@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Get the video ID from the URL
   const videoId = urlParams.get("id");
-  console.log("Video ID:", videoId);
 
   try {
     // Fetch video data
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
       }
     );
-    console.log(videoResponse);
     if (!videoResponse.ok) {
       const errorText = await videoResponse.text(); // Read the error message
       console.error("Error response:", errorText);

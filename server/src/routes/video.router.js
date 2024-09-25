@@ -25,7 +25,6 @@ router.route("/upload").post(
   ]),
   publishVideo
 );
-console.log("video.router.js");
 
 router
   .route("/change/:videoId")
