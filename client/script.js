@@ -120,6 +120,40 @@ async function loadYourVideos() {
   }
 }
 
+document.getElementById("search-button").addEventListener("click", async () => {
+  const query = document.querySelector(".searchBar").value.trim();
+  if (!query) {
+    console.error("Search query is empty");
+    return; // Stop the function if the query is empty
+  }
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/v1/video/?query=${query}`);
+    console.log("Response Status:", response.status);
+    
+    // Ensure the response is okay
+    if (!response.ok) {
+      const errorMessage = await response.text(); // Change to json() if your API sends JSON errors
+      console.error("Error fetching videos:", errorMessage);
+      return;
+    }
+
+    const result = await response.json();
+    console.log("Response Data:", result);
+
+    if (result.status === 200) {
+      renderVideos(result.data.allVideos, "search");
+      //hide h1 element
+      document.getElementById("naman").style.display = "none";
+      showSection('search');  
+    } else {
+      console.error("Error fetching videos:", result.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+});
+
 function timeAgo(date) {
   const now = new Date();
   const seconds = Math.floor((now - date) / 1000);
@@ -155,14 +189,15 @@ function renderVideos(videos, section) {
   // Sort videos by createdAt in descending order (newest first)
   if (section != "history")
     videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
+
   let videoGrid = document.getElementById(
     section === "home" ? "video-grid-home" : "video-grid-your-videos"
   );
   if (section === "history")
     videoGrid = document.getElementById("video-grid-history");
+  if(section === "search") videoGrid = document.getElementById("video-grid-search");
   if (!videoGrid) return;
-
+  console.log(section); 
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
 
   videos.forEach((video) => {
@@ -483,6 +518,8 @@ function setupDropdownMenus() {
     }
   });
 }
+
+
 
 // Call the function to set up the dropdown menus
 setupDropdownMenus();

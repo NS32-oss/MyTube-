@@ -87,9 +87,9 @@ const getAllVideos = asyncHandler(async (req, res) => {
     .skip((pageNumber - 1) * limitNumber)
     .limit(limitNumber)
     .populate("owner", "username avatar");
-  if (!allVideos.length) {
-    throw new apiError(404, "No videos found");
-  }
+  // if (!allVideos.length) {
+  //   throw new apiError(404, "No videos found");
+  // }
   return res.status(200).json(
     new apiResponse(200, "All videos fetched succesfully", {
       allVideos,
