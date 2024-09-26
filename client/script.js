@@ -186,6 +186,12 @@ function timeAgo(date) {
   return `Just now`;
 }
 
+function formatDuration(durationInSeconds) {
+  const minutes = Math.floor(durationInSeconds / 60);
+  const seconds = Math.floor(durationInSeconds % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
 function renderVideos(videos, section) {
   // Sort videos by createdAt in descending order (newest first)
   if (section != "history")
@@ -209,7 +215,7 @@ function renderVideos(videos, section) {
 
     const uploadDate = new Date(video.createdAt);
     const timeAgoText = timeAgo(uploadDate);
-    const videoDuration = video.duration.toFixed(2);
+    const videoDuration = formatDuration(video.duration);
     const videoId = video._id;
 
     videoCard.innerHTML = `
