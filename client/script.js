@@ -128,8 +128,10 @@ document.getElementById("search-button").addEventListener("click", async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8000/api/v1/video/?query=${query}`);
-    
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/video/?query=${query}`
+    );
+
     // Ensure the response is okay
     if (!response.ok) {
       const errorMessage = await response.text(); // Change to json() if your API sends JSON errors
@@ -138,13 +140,13 @@ document.getElementById("search-button").addEventListener("click", async () => {
     }
 
     const result = await response.json();
-    console.log("Response Data:", result);
+    // console.log("Response Data:", result);
 
     if (result.status === 200) {
       renderVideos(result.data.allVideos, "search");
       //hide h1 element
       document.getElementById("naman").style.display = "none";
-      showSection('search');  
+      showSection("search");
     } else {
       console.error("Error fetching videos:", result.message);
     }
@@ -194,11 +196,14 @@ function renderVideos(videos, section) {
   );
   if (section === "history")
     videoGrid = document.getElementById("video-grid-history");
-  if(section === "search") videoGrid = document.getElementById("video-grid-search");
+  if (section === "search")
+    videoGrid = document.getElementById("video-grid-search");
   if (!videoGrid) return;
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
 
   videos.forEach((video) => {
+    // if (section == "history")
+    // console.log(video);
     const videoCard = document.createElement("div");
     videoCard.className = "video-card";
 
@@ -516,8 +521,6 @@ function setupDropdownMenus() {
     }
   });
 }
-
-
 
 // Call the function to set up the dropdown menus
 setupDropdownMenus();
