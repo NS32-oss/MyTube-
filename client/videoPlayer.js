@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const subscribersData = await subscribersResponse.json();
     let subscribers = subscribersData.data;
-
+    document.querySelector(".loader").style.display = "none";
     // Get elements from the DOM
     const playerContainer = document.getElementById(
       "video-player-container-home"

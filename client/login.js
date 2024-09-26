@@ -47,14 +47,14 @@ async function loginUser() {
       }
 
       const { accessToken, refreshToken } = data.data;
-
       // Set cookies using Cookies library
       setCookie('accessToken', accessToken, 2);  // No secure attribute for local testing
       setCookie('refreshToken', refreshToken, 70); // Assuming refresh token is valid for 7 days
-
+      
       // Update button style and redirect after a delay
       loginButton.classList.add("success");
       setTimeout(() => {
+        document.querySelector(".loader").style.display = "block";
         window.location.href = "index.html";
       }, 700);
     } else {

@@ -1,8 +1,4 @@
-// profile.js
 
-// Import Cookies library if using module bundler
-// import Cookies from 'js-cookie'; // Uncomment if using module bundler
-// Function to handle token errors
 function handleTokenError() {
   window.location.href = "login.html";
 }
@@ -81,6 +77,8 @@ async function fetchCurrentUser() {
         userID = user._id;
         displayUserProfile(user);
         displayUserCoverImage(user);
+        //stop loader
+        document.querySelector(".loader").style.display = "none";
       } else {
         console.error("Error fetching user data:", data.message);
         handleTokenError();

@@ -1,4 +1,5 @@
 // Function to navigate between steps in the upload process
+//stop loader after page load
 function nextStep(step) {
   // Hide all steps
   document.querySelectorAll(".upload-step").forEach((stepElement) => {
@@ -20,6 +21,9 @@ function backToHome() {
 
 // Function to submit the video upload
 async function submitVideo() {
+  //make loader  class visible
+  document.querySelector(".loader").style.display = "block";
+   
   const videoFile = document.getElementById("video-file").files[0];
   const thumbnailFile = document.getElementById("thumbnail-file").files[0];
   const title = document.getElementById("video-title").value;
@@ -55,6 +59,8 @@ async function submitVideo() {
       alert(`Error: ${errorData.message}`);
     }
   } catch (error) {
+    //stop loader 
+    document.querySelector(".loader").style.display = "none";
     alert("Video uploaded successfully!");
     window.location.href = "index.html"; // Redirect to home page in case of error
   }

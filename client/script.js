@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function initializePage() {
   await checkTokenAndFetchUser();
   await loadVideos("home");
+  document.querySelector(".loader").style.display = "none";
   showSection("home");
   await loadYourVideos();
   await loadWatchHistory();
