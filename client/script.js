@@ -129,7 +129,6 @@ document.getElementById("search-button").addEventListener("click", async () => {
 
   try {
     const response = await fetch(`http://localhost:8000/api/v1/video/?query=${query}`);
-    console.log("Response Status:", response.status);
     
     // Ensure the response is okay
     if (!response.ok) {
@@ -197,7 +196,6 @@ function renderVideos(videos, section) {
     videoGrid = document.getElementById("video-grid-history");
   if(section === "search") videoGrid = document.getElementById("video-grid-search");
   if (!videoGrid) return;
-  console.log(section); 
   videoGrid.innerHTML = videos.length === 0 ? "<p>No videos found</p>" : "";
 
   videos.forEach((video) => {
