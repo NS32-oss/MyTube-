@@ -13,7 +13,8 @@ const allowedOrigins = [
   'http://127.0.0.1:5500',
   'http://localhost:3000',
   'https://example.com',
-  'https://mytubestream.vercel.app' // Add your Vercel URL here
+  'https://mytubestream.vercel.app',
+  'https://mytubestream.vercel.app/login.html' // Add your Vercel URL here
 ];
 
 app.use(
