@@ -16,13 +16,12 @@ const generateAccessAndRefreshToken = async (userId) => {
     return { accessToken, refreshToken };
   } catch (err) {
     console.log(err);
-    throw new apiError(500, "Error in generating token");
+    throw new apiError(500, "Error IN generating token");
   }
 };
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
-  // console.log(" Email: ", email);
 
   if (
     [fullName, email, username, password].some((field) => field?.trim() === "")
@@ -36,9 +35,6 @@ const registerUser = asyncHandler(async (req, res) => {
   if (existedUser) {
     throw new apiError(409, "User Already Exist");
   }
-  console.log(req.files);
-  // console.log("files : ");
-  // console.log(req.files);
   const avatarLocalPath = req.files?.avatar[0]?.path;
   const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
