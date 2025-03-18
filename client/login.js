@@ -1,6 +1,10 @@
 // Set cookies using Cookies library
 function setCookie(name, value, days, secure = false) {
-  Cookies.set(name, value, { expires: days, secure: secure, sameSite: 'Strict' });
+  Cookies.set(name, value, {
+    expires: days,
+    secure: secure,
+    sameSite: "Strict",
+  });
 }
 
 // Display error messages
@@ -25,21 +29,28 @@ async function loginUser() {
 
   try {
     // Send login request
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/users/login`, {
-      method: "POST",
-      body: new URLSearchParams(formData),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/login`,
+      {
+        method: "POST",
+        body: new URLSearchParams(formData),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        credentials: "include",
+      }
+    );
 
     // Parse response data
     const data = await response.json();
     console.log(data);
 
     // Check if login was successful
-    if (response.ok && data.status === 200 && data.message === "User logged in successfully") {
+    if (
+      response.ok &&
+      data.status === 200 &&
+      data.message === "User logged in successfully"
+    ) {
       const successMessage = document.getElementById("login-success-message");
       if (successMessage) {
         successMessage.textContent = "Login successful!";
@@ -48,9 +59,9 @@ async function loginUser() {
 
       const { accessToken, refreshToken } = data.data;
       // Set cookies using Cookies library
-      setCookie('accessToken', accessToken, 2);  // No secure attribute for local testing
-      setCookie('refreshToken', refreshToken, 70); // Assuming refresh token is valid for 7 days
-      
+      setCookie("accessToken", accessToken, 2); // No secure attribute for local testing
+      setCookie("refreshToken", refreshToken, 70); // Assuming refresh token is valid for 7 days
+
       // Update button style and redirect after a delay
       loginButton.classList.add("success");
       setTimeout(() => {
