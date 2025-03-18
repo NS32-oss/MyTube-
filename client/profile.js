@@ -1,4 +1,3 @@
-
 function handleTokenError() {
   window.location.href = "login.html";
 }
@@ -234,7 +233,6 @@ async function updateCoverImage(event) {
   }
 }
 
-
 // Function to remove cover image
 async function removeCoverImage() {
   try {
@@ -244,14 +242,17 @@ async function removeCoverImage() {
       return;
     }
 
-    const response = await fetch('https://mytubeapp.onrender.com/api/v1/users/removeCoverImage', {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      },
-      credentials: 'include' // Include cookies for session
-    });
-    
+    const response = await fetch(
+      "https://mytubeapp.onrender.com/api/v1/users/removeCoverImage",
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include", // Include cookies for session
+      }
+    );
+
     console.log(response);
     const data = await response.json();
     console.log(data);
@@ -259,7 +260,7 @@ async function removeCoverImage() {
       console.log("Cover image removed successfully");
       const userCoverImg = document.querySelector("#cover-image");
       userCoverImg.src =
-      "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png" ;
+        "https://media.sproutsocial.com/uploads/2f_facebook-cover-photo_labels@2x-1.png";
       //reload after 1 second
       setTimeout(() => {
         window.location.reload();
@@ -272,8 +273,6 @@ async function removeCoverImage() {
     console.error("Error removing cover image:", error);
   }
 }
-
-
 
 // Function to toggle cover image options
 function toggleCoverImageOptions() {
@@ -298,13 +297,16 @@ async function logoutUser() {
       return;
     }
 
-    const response = await fetch(`https://mytubeapp.onrender.com/api/v1/users/logout`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${accessToken}`, // Optionally include the token for verification
-      },
-    });
+    const response = await fetch(
+      `https://mytubeapp.onrender.com/api/v1/users/logout`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Optionally include the token for verification
+        },
+      }
+    );
 
     if (response.ok) {
       // Clear cookies
@@ -353,7 +355,7 @@ async function updateProfileDetails(event) {
     }
 
     const response = await fetch(
-      `https://mytubeapp.onrender.com/api/v1/users/updateAccount`,     
+      `https://mytubeapp.onrender.com/api/v1/users/updateAccount`,
       {
         method: "PATCH",
         headers: {
@@ -434,34 +436,37 @@ async function fetchCounts() {
       throw new Error("Access token is missing");
     }
 
-    const [subscribersResponse, subscribedToResponse,views] = await Promise.all([
-      fetch(
-        `https://mytubeapp.onrender.com/api/v1/subscription/count-subscribers/${channelId}`,
-        {
+    const [subscribersResponse, subscribedToResponse, views] =
+      await Promise.all([
+        fetch(
+          `https://mytubeapp.onrender.com/api/v1/subscription/count-subscribers/${channelId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include",
+          }
+        ),
+        fetch(
+          `https://mytubeapp.onrender.com/api/v1/subscription/count-subscribed-to`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            credentials: "include",
+          }
+        ),
+        fetch(`https://mytubeapp.onrender.com/api/v1/video/views`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
           credentials: "include",
-        }
-      ),
-      fetch(`https://mytubeapp.onrender.com/api/v1/subscription/count-subscribed-to`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-      }),
-      fetch(`https://mytubeapp.onrender.com/api/v1/video/views`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        credentials: "include",
-      }),
-    ]);
+        }),
+      ]);
     // total no. of views of current user
-
 
     // console.log(subscribersResponse);
     const subscribersCount = await subscribersResponse.json();
